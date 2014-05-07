@@ -1,0 +1,40 @@
+<div class="row error-fatal">
+    <div class="col-sm-12">
+        <p class="lead"><i class="fa fa-exclamation-triangle fa-3x"></i> Une erreur grave vient de se produire.
+            L'application a cessée de fonctionner !</p>
+
+        <p>Veuillez noter les informations indiqées ci-dessous et les fournir à l'administrater du site.</p>
+
+        <p class="stacktrace"><strong>Message : </strong>{{ error.name }} / {{ error.message }}</p>
+
+        <p ng-show="error.reasonOrigin" class="stacktrace"><strong>Origine :</strong> </p>
+        <ul ng-show="error.reasonOrigin" class="stacktrace">
+          	<li><strong>URL : </strong>{{ error.reasonOrigin.config.method }} {{ error.reasonOrigin.config.url }}</li>
+          	<li><strong>Statut : </strong>{{ error.reasonOrigin.status }}</li>
+          	<li><strong>Data : </strong>{{ error.reasonOrigin.config.data }}</li>
+          	<li><strong>Headers :</strong>
+            	<ul ng-show="headers !==0">
+         			<li ng-repeat="header in headers">{{ header }}</li>
+      			</ul>
+      		</li>
+      		<li><strong>Response :</strong>
+  	          <ul ng-show="error.reasonOrigin.data.ExeptionClassname">
+		          	<li><strong>Name : </strong>{{ error.reasonOrigin.data.name }}</li>
+	        	  	<li><strong>ExeptionClassname : </strong>{{ error.reasonOrigin.data.exeptionClassname }}</li>
+	        	  	<li><strong>Message : </strong>{{ error.reasonOrigin.data.message }}</li>
+	          </ul>
+	        </li>
+
+        </ul>
+
+        <p class="stacktrace"><strong>Stack trace : </strong>{{ error.stack }}</p>
+
+        <p ng-show="calls.length !==0" class="stacktrace"><strong>Liste des appels au serveur :</strong></p>
+        <ul ng-show="calls.length !==0" class="stacktrace">
+            <li ng-repeat="call in calls track by $index">{{ call }}</li>
+        </ul>
+
+        <p>Cliquez <a href="#/start">ici</a> pour vous authentifier à nouveau</p>
+    </div>
+</div>
+

@@ -1,0 +1,10 @@
+<div class="row" ng-show="exceptionFromServer">
+    <div class="col-sm-12">
+        <div ng-class="['alert', 'alert-danger', 'alert-dismissable']">
+            {{exceptionFromServer.message}}
+            <ul>
+                <li ng-repeat="fieldError in exceptionFromServer.fieldErrors track by $index">Champ <strong>{{ fieldError.fieldname }}</strong> : {{fieldError.message}}</li>
+            </ul>
+        </div>
+    </div>
+</div>

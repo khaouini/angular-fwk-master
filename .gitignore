@@ -1,0 +1,12 @@
+*.map
+node_modules
+dist
+build
+reports
+.tmp
+.sass-cache
+test
+coverage
+.idea/**/*
+.svn
+
