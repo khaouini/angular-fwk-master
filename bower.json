@@ -6,13 +6,25 @@
     "FWK", "ANGULARJS", "DEI"
   ],
   "authors": [
-    "mathieu.guillemette@caissedesdepots.fr"
+    "mathieu.guillemette@caissedesdepots.fr",
+    "guillaume.dauvergne@caissedesdepots.fr"
   ],
   "private": true,
   "dependencies": {
       "bootstrap": "~3.0.0",
       "angular": "~1.2.14",
+      "angular-resource": "~1.2.14",
       "angular-sanitize": "~1.2.14",
-      "angular-i18n": "~1.2.14"
+      "angular-animate": "~1.2.14",
+      "angular-cookies": "~1.2.14",
+      "angular-i18n": "~1.2.14",
+      "font-awesome": "~4.0.3",
+      "angular-ui-router": "0.2.8",
+      "angular-local-storage":"0.0.1"
+  },
+  "devDependencies": {
+      "angular-mocks": "~1.2.14",
+      "angular-scenario": "~1.2.14"
   }
+
 }

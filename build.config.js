@@ -13,8 +13,6 @@ module.exports = {
     report_dir: 'reports',
 
 
-
-
     /**
      * This is a collection of file patterns that refer to our app code (the
      * stuff in `src/`). These file paths are used in the configuration of
@@ -65,7 +63,12 @@ module.exports = {
      */
     vendor_files: {
         js: [
-
+            'vendor-bower/angular/angular.js',
+            'vendor-bower/angular-resource/angular-resource.js',
+            'vendor-bower/angular-sanitize/angular-sanitize.js',
+            'vendor-bower/angular-ui-router/release/angular-ui-router.js',
+            'vendor-svn/angular-local-storage/angular-local-storage.js',
+            'vendor-svn/angular-i18n/angular-locale_fr-fr.js'
         ],
         css: [
 

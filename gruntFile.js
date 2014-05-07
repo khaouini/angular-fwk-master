@@ -16,7 +16,6 @@ module.exports = function ( grunt ) {
     grunt.loadNpmTasks('grunt-contrib-compress');
 
     grunt.loadNpmTasks('grunt-plato');
-    grunt.loadNpmTasks('grunt-protractor-runner');
     grunt.loadNpmTasks('grunt-istanbul');
 
     /**
@@ -272,24 +271,6 @@ module.exports = function ( grunt ) {
             }
         },
 
-        protractor: {
-            options: {
-                configFile: "node_modules/protractor/referenceConf.js", // Default config file
-                keepAlive: true, // If false, the grunt process stops when the test fails.
-                noColor: false, // If true, protractor will not use colors in its output.
-                args: {
-                    // Arguments passed to the command
-                }
-            },
-            testsIHM: {
-                options: {
-                    configFile: "test-js/config/e2e.conf.js", // Target-specific config file
-                    args: {} // Target-specific arguments
-                }
-            }
-        },
-
-
         /**
          * The Karma configurations.
          */
@@ -313,60 +294,12 @@ module.exports = function ( grunt ) {
          */
         karmaconfig: {
             unit: {
-                dir: '<%= build_dir %>',
+                dir: '<%= build_dir %>/tests/unit',
                 src: [
                     '<%= vendor_files.js %>',
                     '<%= test_files.js %>'
                 ]
             }
-        },
-
-
-
-        /**
-         * And for rapid development, we have a watch set up that checks to see if
-         * any of the files listed below change, and then to execute the listed
-         * tasks when they do. This just saves us from having to type "grunt" into
-         * the command-line every time we want to see what we're working on; we can
-         * instead just leave "grunt watch" running in a background terminal. Set it
-         * and forget it, as Ron Popeil used to tell us.
-         *
-         * But we don't need the same thing to happen for all the files.
-         */
-        delta: {
-            /**
-             * By default, we want the Live Reload to work for all tasks; this is
-             * overridden in some tasks (like this file) where browser resources are
-             * unaffected. It runs by default on port 35729, which your browser
-             * plugin should auto-detect.
-             */
-            options: {
-                livereload: true
-            },
-
-            /**
-             * When the Gruntfile changes, we just want to lint it. In fact, when
-             * your Gruntfile changes, it will automatically be reloaded!
-             */
-            gruntfile: {
-                files: 'gruntFile.js',
-                tasks: [ 'jshint:gruntfile' ],
-                options: {
-                    livereload: false
-                }
-            },
-
-            /**
-             * When our JavaScript source files change, we want to run lint them and
-             * run our unit tests.
-             */
-            jssrc: {
-                files: [
-                    '<%= app_files.js %>'
-                ],
-                tasks: [ 'copy:build_appjs' ]
-            }
-
         },
 
         compress: {
@@ -376,7 +309,7 @@ module.exports = function ( grunt ) {
                 },
                 expand: true,
                 cwd: '<%= build_dir %>',
-                src: ['**/*']
+                src: ['js/*.min.js', 'mock/**/*.json']
             }
         }
 

@@ -9,4 +9,5 @@ test
 coverage
 .idea/**/*
 .svn
-
+vendor-svn
+vendor-bower

@@ -10,12 +10,13 @@
 
                 var path, request, headerAuth, token;
 
-                if (login.toUpperCase()!=='JDOE' || password.toUpperCase() !== 'PASSWORD') {
-                	var fault = invalidCredentialFault(localizedMessages.get('login.error.invalidCredentials', {}));
-                	return $q.reject(fault);
-                    //return $q.when(false);
-                }
                 if (FWK_CONSTANT.profile.toUpperCase() === 'MOCK') {
+
+                    if (login.toUpperCase()!=='JDOE' || password.toUpperCase() !== 'PASSWORD') {
+                        var fault = invalidCredentialFault(localizedMessages.get('login.error.invalidCredentials', {}));
+                        return $q.reject(fault);
+                    }
+
                 	path ='src/commun/security/mock/user.json';
                 	headerAuth = {};
                 	request = $http.get(path, angular.extend({cache: false}, headerAuth));
