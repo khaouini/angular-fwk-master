@@ -55,7 +55,7 @@ module.exports = function ( grunt ) {
          */
         clean: {
             report: ['<%= report_dir %>'],
-            all: ['<%= build_dir %>'],
+            build: ['<%= build_dir %>'],
             dist: ['<%= dist_dir %>'],
             options: {
                 force: true
@@ -272,23 +272,6 @@ module.exports = function ( grunt ) {
         },
 
         /**
-         * The Karma configurations.
-         */
-        karma: {
-            options: {
-                configFile: '<%= build_dir %>/karma-unit.js'
-            },
-            watch: {
-                runnerPort: 9101,
-                background: true
-            },
-            run: {
-                singleRun: true
-            }
-        },
-
-
-        /**
          * This task compiles the karma template so that changes to its file array
          * don't have to be managed manually.
          */
@@ -297,8 +280,24 @@ module.exports = function ( grunt ) {
                 dir: '<%= build_dir %>/tests/unit',
                 src: [
                     '<%= vendor_files.js %>',
-                    '<%= test_files.js %>'
+                    '<%= test_files.js %>' //mock
                 ]
+            }
+        },
+
+        /**
+         * The Karma configurations.
+         */
+        karma: {
+            options: {
+                configFile: '<%= build_dir %>/tests/unit/karma-unit.js'
+            },
+            watch: {
+                runnerPort: 9101,
+                background: true
+            },
+            run: {
+                singleRun: true
             }
         },
 
@@ -323,18 +322,13 @@ module.exports = function ( grunt ) {
     /**
      * The default task is to build and compile.
      */
-    grunt.registerTask( 'default', [ 'int' ] );
-
-
+    grunt.registerTask( 'default', [ 'release' ] );
 
     /**
-     * The `dev` task gets your app ready to run for development and testing.
+     * TODO
+     * istambul
+     * karma
      */
-    grunt.registerTask( 'int', [
-        'clean:all',
-        'concat:compile_js'
-    ]);
-
 
     /**
      * Rapport qualimetrie
@@ -344,23 +338,19 @@ module.exports = function ( grunt ) {
     ]);
 
     /**
-     * Tests IHM à la selenium (protractor)
-     */
-    grunt.registerTask( 'tests', [
-        'protractor:testsIHM'
-    ]);
-
-    /**
-     * The `prod` task gets your app ready for deployment by concatenating and
+     * The `release` task gets your app ready for deployment by concatenating and
      * minifying your code.
      */
     grunt.registerTask( 'release', [
-        'clean:all',
+        'clean:build', 'clean:dist',
+        'jshint:beforeconcat',
         'copy',
         'html2js',
         'ngmin',
-        'concat:compile_js',
-        'uglify:compile'
+        'concat',
+        'jshint:afterconcat',
+        'uglify',
+        'compress'
     ]);
 
 
@@ -391,7 +381,7 @@ module.exports = function ( grunt ) {
     grunt.registerMultiTask( 'karmaconfig', 'Process karma config templates', function () {
         var jsFiles = filterForJS( this.filesSrc );
 
-        grunt.file.copy( 'test-js/config/karma-unit.tpl.js', grunt.config( 'build_dir' ) + '/karma-unit.js', {
+        grunt.file.copy( 'test-js-config/karma-unit.tpl.js', grunt.config( 'build_dir' ) + '/tests/unit/karma-unit.js', {
             process: function ( contents, path ) {
                 return grunt.template.process( contents, {
                     data: {

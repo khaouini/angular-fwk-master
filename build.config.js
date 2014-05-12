@@ -27,7 +27,7 @@ module.exports = {
         concat_js_files: [ 'build/src/**/*.js'], //Pointe sur les sources js pré-minifiés dans le répertoire build_dir
         js: [ 'commun/**/*.js', 'views/**/*.js' ], //source js du projet avec tests
         all_js: [ 'src/commun/**/*.js' , 'src/views/**.*.js'],
-        jsunit: ['**/*.spec.js'],
+        jsunit: ['build/tests/unit/**/*.spec.js'],
         mock: {
             json: [ '**/*.json']
         },
@@ -69,6 +69,9 @@ module.exports = {
             'vendor-bower/angular-ui-router/release/angular-ui-router.js',
             'vendor-svn/angular-local-storage/angular-local-storage.js',
             'vendor-svn/angular-i18n/angular-locale_fr-fr.js'
+        ],
+        mock: [
+            'vendor-bower/angular-mocks/angular-mocks.js'
         ],
         css: [
 
