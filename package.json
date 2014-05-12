@@ -24,7 +24,8 @@
     "grunt-istanbul": "0.2.4",
     "gulp-recess": "~0.1.0",
     "load-grunt-tasks": "~0.2.1",
-    "grunt-contrib-compress": "~0.7.0"
+    "grunt-contrib-compress": "~0.7.0",
+    "karma-coverage": "~0.2.1"
   },
   "dependencies": {
     "karma-jasmine": "~0.1.5",

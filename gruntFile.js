@@ -16,7 +16,6 @@ module.exports = function ( grunt ) {
     grunt.loadNpmTasks('grunt-contrib-compress');
 
     grunt.loadNpmTasks('grunt-plato');
-    grunt.loadNpmTasks('grunt-istanbul');
 
     /**
      * Load in our build configuration file.
@@ -139,8 +138,9 @@ module.exports = function ( grunt ) {
                     {
                         src: [ '<%= app_files.jsunit %>' ],
                         dest: '<%= build_dir %>/tests/unit',
-                        cwd: 'src/',
-                        expand: true
+                        cwd: '.',
+                        expand: true,
+                        flatten: true
                     }
                 ]
             },
@@ -266,7 +266,7 @@ module.exports = function ( grunt ) {
                     }
                 },
                 files: {
-                    '<%= report_dir %>': ['<%= app_files.js_files %>']
+                    '<%= report_dir %>/plato': ['<%= app_files.js_files %>']
                 }
             }
         },
@@ -280,7 +280,7 @@ module.exports = function ( grunt ) {
                 dir: '<%= build_dir %>/tests/unit',
                 src: [
                     '<%= vendor_files.js %>',
-                    '<%= test_files.js %>' //mock
+                    '<%= vendor_files.mock %>'
                 ]
             }
         },
@@ -289,15 +289,8 @@ module.exports = function ( grunt ) {
          * The Karma configurations.
          */
         karma: {
-            options: {
-                configFile: '<%= build_dir %>/tests/unit/karma-unit.js'
-            },
-            watch: {
-                runnerPort: 9101,
-                background: true
-            },
-            run: {
-                singleRun: true
+            unit: {
+               configFile: '<%= build_dir %>/tests/unit/karma-unit.js'
             }
         },
 
@@ -350,6 +343,7 @@ module.exports = function ( grunt ) {
         'concat',
         'jshint:afterconcat',
         'uglify',
+        'karmaconfig', 'karma',
         'compress'
     ]);
 
