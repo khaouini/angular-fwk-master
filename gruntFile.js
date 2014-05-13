@@ -301,7 +301,7 @@ module.exports = function ( grunt ) {
                 },
                 expand: true,
                 cwd: '<%= build_dir %>',
-                src: ['js/*.min.js', 'mock/**/*.json']
+                src: ['js/*.min.js', 'mock/**/*.json', 'src/**/fwk-bootstrap.js']
             }
         }
 
@@ -331,6 +331,13 @@ module.exports = function ( grunt ) {
     ]);
 
     /**
+     * Tests unitaires
+     */
+    grunt.registerTask( 'tests', [
+        'copy:build_jsunit', 'karmaconfig', 'karma:unit'
+    ]);
+
+    /**
      * The `release` task gets your app ready for deployment by concatenating and
      * minifying your code.
      */
@@ -342,8 +349,8 @@ module.exports = function ( grunt ) {
         'ngmin',
         'concat',
         'jshint:afterconcat',
-        'uglify',
         'karmaconfig', 'karma',
+        'uglify',
         'compress'
     ]);
 

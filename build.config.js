@@ -24,7 +24,7 @@ module.exports = {
      */
     app_files: {
         js_files: [ 'src/**/*.js', '!src/**/*.spec.js' ],
-        concat_js_files: [ 'build/src/**/*.js'], //Pointe sur les sources js pré-minifiés dans le répertoire build_dir
+        concat_js_files: [ 'build/src/**/*.js', '!build/src/**/fwk-bootstrap.js'], //Pointe sur les sources js pré-minifiés dans le répertoire build_dir
         js: [ 'commun/**/*.js', 'views/**/*.js' ], //source js du projet avec tests
         all_js: [ 'src/commun/**/*.js' , 'src/views/**.*.js'],
         jsunit: ['src/**/*.spec.js'],

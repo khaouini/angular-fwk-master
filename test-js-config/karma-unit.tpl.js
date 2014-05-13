@@ -44,7 +44,7 @@ module.exports = function (config) {
         autoWatch: false,
         browsers: ['PhantomJS'],
         colors: true,
-        logLevel: config.LOG_INFO
+        logLevel: config.LOG_DEBUG
     });
 
 };
