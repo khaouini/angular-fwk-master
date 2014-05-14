@@ -20,7 +20,7 @@
     };
 
 
-    angular.module('fwk-security.interceptor', ['fwk-services'])
+    angular.module('fwk-security.interceptor', ['fwk-security', 'fwk-services'])
 
         .factory('requestSecurityInterceptor', ['$injector', '$q', '$log', 'localizedMessages', 'dateFilter', 'restFault', 'invalidCredentialFault', 'FWK_CONSTANT', 'tokenService', 'httpLogger',
             function ($injector, $q, $log, localizedMessages, dateFilter, restFault, invalidCredentialFault,FWK_CONSTANT, tokenService, httpLogger) {

@@ -77,31 +77,13 @@ describe('Test authentService module', function () {
                 }
             );
     });
-/**
-    it('should send a http request to login the specified user', function() {
-        $httpBackend.when('GET', 'src/commun/security/mock/user.json').respond(200, { user: userInfo });
-        $httpBackend.expect('GET', 'src/commun/security/mock/user.json');
-        authentService.resetCurrentUser();
-        authentService.login('jdoe', 'password');
-        $httpBackend.flush();
-        expect(authentService.currentUser.getFullname()).toBe("John Doe");
-    });
-*/
- /**
-    it('should logout user', function () {
 
+    it('should logout user', function() {
         authentService.currentUser=userInfo;
-
-        $httpBackend.when('GET', 'src/commun/security/mock/logout.json').respond(200, { user: userInfo });
-        $httpBackend.expect('GET', '/login');
-        service.login('email', 'password');
-        $httpBackend.flush();
-
-        //spyOn(authentService, "resetCurrentUser");
+        $httpBackend.when('GET', 'src/commun/security/mock/logout.json').respond(200, {"timestamp": 1395831316776});
+        $httpBackend.expect('GET', 'src/commun/security/mock/logout.json');
         authentService.logout();
-        expect(authentService.currentUser===null).toBeTruthy();
-        //expect(authentService.resetCurrentUser).toHaveBeenCalled();
-        //expect(authentService.logout()).toContain("Vous avez été déconnecté de l\'application avec succés");
+        $httpBackend.flush();
+        expect(authentService.currentUser).toBeNull();
     });
- */
 });

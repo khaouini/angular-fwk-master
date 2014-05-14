@@ -13,6 +13,7 @@ describe('Test tokenService module', function () {
             { profile: 'MOCK',
                 oauth : {
                     accessToken : {
+                        prefix : 'APP_0.1',
                         keyname : 'ACCESS_TOKEN'
                     }
                 }});

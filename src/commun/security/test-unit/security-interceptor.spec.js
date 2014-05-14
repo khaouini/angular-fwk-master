@@ -1,0 +1,172 @@
+/**
+ * Created by Guillemette on 14/05/2014.
+ */
+
+describe('Tests requestSecurityInterceptor Module ', function() {
+    var interceptor, promise, wrappedPromise, httpLogger, $http, oauthService,tokenService, config;
+
+    beforeEach(function () {
+        angular.module('test', ['fwk-security.interceptor', 'fwk-security.oauth']).value('FWK_CONSTANT',
+            { profile: 'MOCK',
+              oauth: {
+                    queryStringParameters : {
+                        response_type: 'token',
+                        client_id : 'urn:cdc:retraite:esg:ihm:1.0',
+                        redirect_uri : 'http://desote-web-springmvc-spi/oauth2Callback.html',
+                        scope : 'urn:cdc:retraite:cli:rest:1.0, urn:cdc:retraite:set01:rest:1.0'
+                    },
+                    accessToken : {
+                        prefix : 'APP_0.1',
+                        keyname : 'ACCESS_TOKEN'
+                    },
+                    whitelist : {
+                        // pas  d'ajout de jeton JWT pour ces urls
+                        request : ['\\/idp\\/login','\\/idp\\/logout', '\\/oauth2\\/auth', '\\w+\\.tpl.html$', '\\w+\\.json$'],
+                        // pas de traitement particulier (401) pour ces url
+                        response: ['\\/idp/login']
+                    }
+              },
+              trace : {
+                MAX_HISTORY_SIZE: 3
+              }
+            });
+    });
+
+    beforeEach(module('test'));
+
+    beforeEach(inject(function($injector) {
+        oauthService = $injector.get('oauthService');
+        tokenService = $injector.get('tokenService');
+        interceptor = $injector.get('requestSecurityInterceptor');
+        httpLogger = $injector.get('httpLogger');
+        $http = $injector.get('$http');
+        wrappedPromise = {};
+        promise = {
+            then: jasmine.createSpy('then').andReturn(wrappedPromise)
+        };
+        config = {
+            url: "/idp/login",
+            cache: {},
+            headers: {
+                Accept: "application/json"
+            }
+        };
+        spyOn(tokenService, "getLocalToken").andReturn("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBUFBfVVNFUl9JRCI6IjM4OTRIIiwiQVBQX1VTRVJfUk9MRSI6WyJHRVNUSU9OTkFJUkUiXSwiQVBQX0NMSUVOVF9ST0xFIjpbIlJFQUQiLCJXUklURSJdLCJleHAiOjEzOTU4MTk3NTcsImF1ZCI6InVybjpjZGM6cmV0cmFpdGU6Y2xpOnJlc3Q6MS4wLCB1cm46Y2RjOnJldHJhaXRlOnNldDAxOnJlc3Q6MS4wIiwiaXNzIjoidXJuOmNkYzpjb25mbnVtOmlkcDphdXRoMiIsInN1YiI6InVybjpjZGM6cmV0cmFpdGU6ZXNnOmlobToxLjAiLCJpYXQiOjEzOTU4MTYxNTd9.1tnRB0ENn21zLvKdASQzSEzTfde0xCJYpuy0wZj7_RQ");
+        spyOn(tokenService, "getUUID").andReturn("ca38320b-841d-4659-81eb-9ffcda0f512b");
+        expect(interceptor).toBeDefined();
+    }));
+
+    it('should request idp/login OK', function() {
+        var newPromise = interceptor.request(config);
+        expect(config.headers['X-RequestID']).toMatch("[0123456789abcdef]{8}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{12}");
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+
+    it('should request rest/domaines OK', function() {
+        config.url="/rest/domaines";
+        var newPromise = interceptor.request(config);
+        expect(config.headers['X-RequestID']).toMatch("[0123456789abcdef]{8}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{12}");
+        expect(config.headers['Authorization']).toBe("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBUFBfVVNFUl9JRCI6IjM4OTRIIiwiQVBQX1VTRVJfUk9MRSI6WyJHRVNUSU9OTkFJUkUiXSwiQVBQX0NMSUVOVF9ST0xFIjpbIlJFQUQiLCJXUklURSJdLCJleHAiOjEzOTU4MTk3NTcsImF1ZCI6InVybjpjZGM6cmV0cmFpdGU6Y2xpOnJlc3Q6MS4wLCB1cm46Y2RjOnJldHJhaXRlOnNldDAxOnJlc3Q6MS4wIiwiaXNzIjoidXJuOmNkYzpjb25mbnVtOmlkcDphdXRoMiIsInN1YiI6InVybjpjZGM6cmV0cmFpdGU6ZXNnOmlobToxLjAiLCJpYXQiOjEzOTU4MTYxNTd9.1tnRB0ENn21zLvKdASQzSEzTfde0xCJYpuy0wZj7_RQ");
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+
+});
+
+describe('Tests responseSecurityInterceptor Module ', function() {
+    var interceptor, promise, wrappedPromise, httpLogger, $http, oauthService,tokenService, aResponse, koResponse;
+
+    beforeEach(function () {
+        angular.module('test', ['fwk-security.interceptor', 'fwk-security.oauth']).value('FWK_CONSTANT',
+            { profile: 'MOCK',
+                oauth: {
+                    queryStringParameters : {
+                        response_type: 'token',
+                        client_id : 'urn:cdc:retraite:esg:ihm:1.0',
+                        redirect_uri : 'http://desote-web-springmvc-spi/oauth2Callback.html',
+                        scope : 'urn:cdc:retraite:cli:rest:1.0, urn:cdc:retraite:set01:rest:1.0'
+                    },
+                    accessToken : {
+                        prefix : 'APP_0.1',
+                        keyname : 'ACCESS_TOKEN'
+                    },
+                    whitelist : {
+                        // pas  d'ajout de jeton JWT pour ces urls
+                        request : ['\\/idp\\/login','\\/idp\\/logout', '\\/oauth2\\/auth', '\\w+\\.tpl.html$', '\\w+\\.json$'],
+                        // pas de traitement particulier (401) pour ces url
+                        response: ['\\/idp/login']
+                    }
+                },
+                trace : {
+                    MAX_HISTORY_SIZE: 3
+                }
+            });
+    });
+
+    beforeEach(module('test'));
+
+    beforeEach(inject(function($injector) {
+        oauthService = $injector.get('oauthService');
+        tokenService = $injector.get('tokenService');
+        interceptor = $injector.get('responseSecurityInterceptor');
+        httpLogger = $injector.get('httpLogger');
+        $http = $injector.get('$http');
+        wrappedPromise = {};
+        promise = {
+            then: jasmine.createSpy('then').andReturn(wrappedPromise)
+        };
+        aResponse = {
+            config : {
+                requestTimestamp: 1400076677946,
+                url: "/rest/domaines",
+                cache: {},
+                headers: {
+                    Accept: "application/json",
+                    "X-RequestID": "ca38320b-841d-4659-81eb-9ffcda0f512b"
+                },
+                status: 200,
+                data: "données..."
+            }
+        };
+        koResponse = {
+            config : {
+                requestTimestamp: 1400076677946,
+                url: "/rest/domaines",
+                cache: {},
+                headers: {
+                    Accept: "application/json",
+                    "X-RequestID": "ca38320b-841d-4659-81eb-9ffcda0f512b"
+                }
+            },
+            status: 400, //Bad Request
+            data: {
+                "typeError":"FieldValidationFault",
+                "fieldErrors":[
+                    {"fieldname":"nom","message":"La taille du champ nom doit &amp;ecirc&#x3b;tre comprise entre 3 et 30 caract&amp;egrave&#x3b;res","type":"Size"},
+                    {"fieldname":"adresse","message":"La taille du champ adresse doit &amp;ecirc&#x3b;tre comprise entre 5 et 50 caract&amp;egrave&#x3b;res","type":"Size"}
+                ]
+            }
+
+        };
+        spyOn(tokenService, "getLocalToken").andReturn("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBUFBfVVNFUl9JRCI6IjM4OTRIIiwiQVBQX1VTRVJfUk9MRSI6WyJHRVNUSU9OTkFJUkUiXSwiQVBQX0NMSUVOVF9ST0xFIjpbIlJFQUQiLCJXUklURSJdLCJleHAiOjEzOTU4MTk3NTcsImF1ZCI6InVybjpjZGM6cmV0cmFpdGU6Y2xpOnJlc3Q6MS4wLCB1cm46Y2RjOnJldHJhaXRlOnNldDAxOnJlc3Q6MS4wIiwiaXNzIjoidXJuOmNkYzpjb25mbnVtOmlkcDphdXRoMiIsInN1YiI6InVybjpjZGM6cmV0cmFpdGU6ZXNnOmlobToxLjAiLCJpYXQiOjEzOTU4MTYxNTd9.1tnRB0ENn21zLvKdASQzSEzTfde0xCJYpuy0wZj7_RQ");
+        spyOn(tokenService, "getUUID").andReturn("ca38320b-841d-4659-81eb-9ffcda0f512b");
+        expect(interceptor).toBeDefined();
+    }));
+
+    it('should response OK', function() {
+        var newResponse = interceptor.response(aResponse);
+        expect(newResponse).toBe(aResponse);
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+
+    it('should response HTTP 400', function() {
+        interceptor.responseError(koResponse).then(null,function(fault) {
+            expect(fault).toBeDefined();
+            expect(fault.name).toBe("FIELD_VALIDATION_ERROR");
+            expect(fault.message).toBe("Problème recontré lors de la validation du formulaire par le serveur !");
+            expect(fault.fieldErrors).not.toBeNull;
+            expect(fault.fieldErrors.length).toBe(2);
+            expect(fault.fieldErrors[0].fieldname).toBe("nom");
+        });
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+});
