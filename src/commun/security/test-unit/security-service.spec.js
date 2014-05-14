@@ -1,6 +1,22 @@
 /**
  * Created by Guillemette on 13/05/2014.
  */
+describe('Test securityUtils module', function () {
+    var securityUtils;
+
+    beforeEach(module('fwk-security.service'));
+
+    beforeEach(inject(function($injector) {
+        securityUtils = $injector.get('securityUtils');
+    }));
+
+    it('should find a role', function() {
+        var roles = ['ADMIN','GEST','UTIL'];
+        expect(securityUtils.findByRole(roles, 'GEST')).toBeTruthy();
+        expect(securityUtils.findByRole(roles, 'CCMT')).toBeFalsy();
+    });
+});
+
 describe('Test authentService module', function () {
 
     var authentService, $httpBackend, userInfo;

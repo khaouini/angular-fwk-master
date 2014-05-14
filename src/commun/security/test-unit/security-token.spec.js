@@ -43,4 +43,8 @@ describe('Test tokenService module', function () {
 
         expect(tokenService.getLocalToken()).toBe("");
     });
+
+    it('should get UUID', function () {
+        expect(tokenService.getUUID()).toBeDefined();
+    });
 });

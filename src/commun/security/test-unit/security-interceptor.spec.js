@@ -73,30 +73,30 @@ describe('Tests requestSecurityInterceptor Module ', function() {
 });
 
 describe('Tests responseSecurityInterceptor Module ', function() {
-    var interceptor, promise, wrappedPromise, httpLogger, $http, oauthService,tokenService, aResponse, koResponse;
+    var interceptor, promise, wrappedPromise, httpLogger, $http, oauthService, tokenService, aResponse, koResponse, restFault;
 
     beforeEach(function () {
-        angular.module('test', ['fwk-security.interceptor', 'fwk-security.oauth']).value('FWK_CONSTANT',
+        angular.module('test', ['fwk-security.interceptor', 'fwk-security.oauth', 'fwk-services.error']).value('FWK_CONSTANT',
             { profile: 'MOCK',
                 oauth: {
-                    queryStringParameters : {
+                    queryStringParameters: {
                         response_type: 'token',
-                        client_id : 'urn:cdc:retraite:esg:ihm:1.0',
-                        redirect_uri : 'http://desote-web-springmvc-spi/oauth2Callback.html',
-                        scope : 'urn:cdc:retraite:cli:rest:1.0, urn:cdc:retraite:set01:rest:1.0'
+                        client_id: 'urn:cdc:retraite:esg:ihm:1.0',
+                        redirect_uri: 'http://desote-web-springmvc-spi/oauth2Callback.html',
+                        scope: 'urn:cdc:retraite:cli:rest:1.0, urn:cdc:retraite:set01:rest:1.0'
                     },
-                    accessToken : {
-                        prefix : 'APP_0.1',
-                        keyname : 'ACCESS_TOKEN'
+                    accessToken: {
+                        prefix: 'APP_0.1',
+                        keyname: 'ACCESS_TOKEN'
                     },
-                    whitelist : {
+                    whitelist: {
                         // pas  d'ajout de jeton JWT pour ces urls
-                        request : ['\\/idp\\/login','\\/idp\\/logout', '\\/oauth2\\/auth', '\\w+\\.tpl.html$', '\\w+\\.json$'],
+                        request: ['\\/idp\\/login', '\\/idp\\/logout', '\\/oauth2\\/auth', '\\w+\\.tpl.html$', '\\w+\\.json$'],
                         // pas de traitement particulier (401) pour ces url
                         response: ['\\/idp/login']
                     }
                 },
-                trace : {
+                trace: {
                     MAX_HISTORY_SIZE: 3
                 }
             });
@@ -104,18 +104,19 @@ describe('Tests responseSecurityInterceptor Module ', function() {
 
     beforeEach(module('test'));
 
-    beforeEach(inject(function($injector) {
+    beforeEach(inject(function ($injector) {
         oauthService = $injector.get('oauthService');
         tokenService = $injector.get('tokenService');
         interceptor = $injector.get('responseSecurityInterceptor');
         httpLogger = $injector.get('httpLogger');
         $http = $injector.get('$http');
+        restFault = $injector.get('restFault');
         wrappedPromise = {};
         promise = {
             then: jasmine.createSpy('then').andReturn(wrappedPromise)
         };
         aResponse = {
-            config : {
+            config: {
                 requestTimestamp: 1400076677946,
                 url: "/rest/domaines",
                 cache: {},
@@ -128,7 +129,7 @@ describe('Tests responseSecurityInterceptor Module ', function() {
             }
         };
         koResponse = {
-            config : {
+            config: {
                 requestTimestamp: 1400076677946,
                 url: "/rest/domaines",
                 cache: {},
@@ -139,10 +140,10 @@ describe('Tests responseSecurityInterceptor Module ', function() {
             },
             status: 400, //Bad Request
             data: {
-                "typeError":"FieldValidationFault",
-                "fieldErrors":[
-                    {"fieldname":"nom","message":"La taille du champ nom doit &amp;ecirc&#x3b;tre comprise entre 3 et 30 caract&amp;egrave&#x3b;res","type":"Size"},
-                    {"fieldname":"adresse","message":"La taille du champ adresse doit &amp;ecirc&#x3b;tre comprise entre 5 et 50 caract&amp;egrave&#x3b;res","type":"Size"}
+                "typeError": "FieldValidationFault",
+                "fieldErrors": [
+                    {"fieldname": "nom", "message": "La taille du champ nom doit &amp;ecirc&#x3b;tre comprise entre 3 et 30 caract&amp;egrave&#x3b;res", "type": "Size"},
+                    {"fieldname": "adresse", "message": "La taille du champ adresse doit &amp;ecirc&#x3b;tre comprise entre 5 et 50 caract&amp;egrave&#x3b;res", "type": "Size"}
                 ]
             }
 
@@ -152,16 +153,16 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         expect(interceptor).toBeDefined();
     }));
 
-    it('should response OK', function() {
+    it('should response OK', function () {
         var newResponse = interceptor.response(aResponse);
         expect(newResponse).toBe(aResponse);
         expect(httpLogger.getLogs().length).toBe(1);
     });
 
-    it('should response HTTP 400', function() {
-        interceptor.responseError(koResponse).then(null,function(fault) {
+    it('should response HTTP 400', function () {
+        interceptor.responseError(koResponse).then(null, function (fault) {
             expect(fault).toBeDefined();
-            expect(fault.name).toBe("FIELD_VALIDATION_ERROR");
+            expect(fault.name).toBe("FieldValidationFault");
             expect(fault.message).toBe("Problème recontré lors de la validation du formulaire par le serveur !");
             expect(fault.fieldErrors).not.toBeNull;
             expect(fault.fieldErrors.length).toBe(2);
@@ -169,4 +170,61 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         });
         expect(httpLogger.getLogs().length).toBe(1);
     });
+
+    it('should response HTTP 400 with expcetion', function () {
+        koResponse.data = 'Unauthorized';
+        expect( function() {
+            interceptor.responseError(koResponse);
+        }).toThrow();
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+
+    it('should response HTTP 500', function () {
+        koResponse.status = 500;
+        expect(function () {
+            interceptor.responseError(koResponse);
+        }).toThrow();
+    });
+
+    it('should response HTTP 401 Invalid login password', function () {
+        koResponse.status = 401;
+        koResponse.config.url = "/idp/login";
+        koResponse.data = 'Unauthorized';
+        interceptor.responseError(koResponse).then(null, function (fault) {
+            expect(fault).toBeDefined();
+            expect(fault.name).toBe("InvalidCredentialFault");
+        });
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+
+    it('should response HTTP 401 page white list', function () {
+        koResponse.status = 401;
+        koResponse.config.url = "/idp/login";
+        koResponse.data = 'autre erreur non gérée...';
+        interceptor.responseError(koResponse).then(null, function (fault) {
+            expect(fault).toBeDefined();
+            expect(fault.name).toBe("RestFault");
+        });
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+
+    it('should response HTTP 401 absence de jeton JWT', function () {
+        koResponse.status = 401;
+        koResponse.data = {
+            error: {
+                code: 'credentials_required'
+            }
+        };
+        //en mode MOCK retrieveToken retourne un jeton sans accès  au service
+        expect(interceptor.responseError(koResponse)).toBeDefined();
+
+    });
+
+    it('should response with error', function () {
+        var anError = new Error();
+        expect(function(){
+            interceptor.responseError(anError);
+        }).toThrow();
+    });
+
 });
