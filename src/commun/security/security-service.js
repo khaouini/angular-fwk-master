@@ -3,8 +3,8 @@
  */
     angular.module('fwk-security.service', ['fwk-services', 'fwk-security'])
 
-        .factory('authentService', ['$http', '$q', '$log', '$rootScope', 'userService', 'localizedMessages', 'FWK_CONSTANT', 'Base64', 'tokenService', 'oauthService', 'invalidCredentialFault',
-            function ($http, $q, $log, $rootScope, userService, localizedMessages,FWK_CONSTANT, Base64, tokenService, oauthService, invalidCredentialFault) {
+        .factory('authentService', ['$http', '$q', '$log', '$rootScope', 'userService', 'localizedMessages', 'FWK_CONSTANT', 'Base64', 'tokenService', 'oauthService', 'invalidCredentialFault','dateFilter',
+            function ($http, $q, $log, $rootScope, userService, localizedMessages,FWK_CONSTANT, Base64, tokenService, oauthService, invalidCredentialFault, dateFilter) {
 
             var processLogin = function (login, password)  {
 
@@ -97,7 +97,7 @@
 
             };
 
-            var processAfterLogout = function () {
+            var processAfterLogout = function (timestamp) {
 
                 //supression du jeton local
                 tokenService.clearLocalToken();
@@ -105,7 +105,8 @@
                 // reset de l'utilisateur connecté
                 authentService.resetCurrentUser();
 
-                return $q.when('logout.success.msg');
+                var msg = localizedMessages.get('logout.success.msg', {dateTime : dateFilter(timestamp, 'dd/MM/yyyy HH:mm:ss')});
+                return $q.when(msg);
             };
 
             // The public API of the service

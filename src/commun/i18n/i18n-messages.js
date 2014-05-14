@@ -7,7 +7,7 @@
         'errors.route.unAuthorized': 'Vous n\'êtes pas habilité à accéder à cette page (droits insuffisants ou non authentifié).',
 	    'login.error.invalidCredentials': 'Echec de l\'authentification.  Vérifiez votre login/mot de passe.',
 	    'login.success.msg': 'BRAVO ! Vous vous êtes authentifié avec succés !',
-	    'logout.success.msg': 'Vous avez été déconnecté de l\'application avec succés !',
+	    'logout.success.msg': 'Vous avez été déconnecté de l\'application avec succés (à {{ dateTime }})!',
 	    'logout.error.msg' : 'Un problème est survenu lors de la déconnexion de l\'utilisateur !',
 	    'error.fatal': 'Une erreur grave est survenue ! {{error}}',
 	    'resource.error.server': 'Problème d\'accès à la resource {{resourcename}}',
