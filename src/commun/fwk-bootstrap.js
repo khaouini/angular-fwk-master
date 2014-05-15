@@ -13,7 +13,7 @@
 	  'fwk-i18n.messages',
 	  'fwk-directives',
 	  /* modules de scenarios commun (controler, ...) */
-	  'fwk-common-uc',
+      'fwk-common-state-uc',
 	  /* template html sous forme de js */
 	  'fwk-templates',
 	  /* local storage pour le stockage du jeton jwt */
@@ -51,6 +51,7 @@
 	      }
 	})
 
+        // Configuration des interceptors et des mpodules utilisés par le Socle AngularJS
 	.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$locationProvider', 'localStorageServiceProvider', 'FWK_CONSTANT',
       function ($httpProvider, $stateProvider, $urlRouterProvider, $locationProvider, localStorageServiceProvider, FWK_CONSTANT) {
 
@@ -91,6 +92,7 @@
 		};
 
 		$rootScope.pageTitle = "Page Principale";
+
 
 	    $rootScope.$on('$stateChangeStart',
 	      function (event, toState, toParams, fromState, fromParams) {

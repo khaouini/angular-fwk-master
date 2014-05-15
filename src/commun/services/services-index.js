@@ -7,5 +7,6 @@
         'fwk-services.error',
         'fwk-services.base64',
         'fwk-services.httpLogger',
-        'fwk-services.uuid'
+        'fwk-services.uuid',
+        'fwk-i18n.messages'
       ]);
