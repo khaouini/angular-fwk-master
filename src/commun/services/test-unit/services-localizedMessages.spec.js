@@ -15,7 +15,7 @@ describe('Test localized messages Module', function () {
     }));
 
     it('should return a localized message if defined', function () {
-        expect(localizedMessages.get('logout.success.msg')).toEqual('Vous avez été déconnecté de l\'application avec succés !');
+        expect(localizedMessages.get('logout.success.msg', {dateTime:'08:50'})).toEqual('Vous avez été déconnecté de l\'application avec succés (à 08:50)!');
     });
 
     it('should return a message key surrounded by a question mark for non-existing messages', function () {
