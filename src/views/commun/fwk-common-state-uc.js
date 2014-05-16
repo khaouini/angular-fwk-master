@@ -1,9 +1,7 @@
 
     angular.module( 'fwk-common-state-uc',
     	['ui.router',
-         'fwk-common-uc',
-         'fwk-services',
-         'fwk-security'
+         'fwk-common-uc'
     ])
 
     .config(function config( $stateProvider ) {
