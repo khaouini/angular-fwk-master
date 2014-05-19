@@ -153,7 +153,20 @@ module.exports = function ( grunt ) {
                         expand: true
                     }
                 ]
+            },
+            dist_js: {
+                files: [
+                    {
+                        src: [ '<%= build_dir %>/js/*.js' ],
+                        dest: '<%= dist_dir %>/',
+                        cwd: '.',
+                        expand: true,
+                        flatten: true
+
+                    }
+                ]
             }
+
         },
 
         /**
@@ -342,7 +355,7 @@ module.exports = function ( grunt ) {
      * minifying your code.
      */
     grunt.registerTask( 'release', [
-        'clean:build', 'clean:dist',
+        'clean:build', 'clean:dist', 'clean:report',
         'jshint:beforeconcat',
         'copy',
         'html2js',
@@ -350,6 +363,7 @@ module.exports = function ( grunt ) {
         'concat',
         'jshint:afterconcat',
         'karmaconfig', 'karma',
+        'plato:report',
         'uglify',
         'compress'
     ]);
