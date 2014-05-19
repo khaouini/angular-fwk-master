@@ -22,7 +22,7 @@
 
     /** Exemple de configuration à reporter sans le fichier du projet*/
 	.constant('FWK_CONSTANT', {
-	      version: '0.1-SNAPSHOT',
+	      version: '0.0.2',
 	      profile: PROFILE_ENABLE[0],
           unauthorizedState: 'unauthorized',
           errorState: 'error',
@@ -36,7 +36,7 @@
 	              scope : 'urn:cdc:retraite:cli:rest:1.0, urn:cdc:retraite:set01:rest:1.0'
 	          },
 	          accessToken : {
-	              prefix : 'APP_0.1',
+	              prefix : 'FWK_0.0.2',
 	              keyname : 'ACCESS_TOKEN'
 	          },
 	          whitelist : {

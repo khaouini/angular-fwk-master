@@ -11,7 +11,7 @@ module.exports = function (config) {
         files: [
             <% scripts.forEach( function ( file ) { %>'<%= file %>',
                 <% }); %>
-            'build/js/angular-fwk-dei-0.0.1-SNAPSHOT.js', //TODO
+            'build/js/<%= packageName %>-<%= packageVersion %>.js', //TODO
             'build/tests/unit/**/*.spec.js'
         ],
 
@@ -20,7 +20,7 @@ module.exports = function (config) {
          * Pas le fichier minifier sinon 100% de couverture !
          */
         preprocessors : {
-            'build/js/angular-fwk-dei-0.0.1-SNAPSHOT.js': ['coverage']
+            'build/js/<%= packageName %>-<%= packageVersion %>.js': ['coverage']
         },
 
         reporters: ['progress', 'coverage'],

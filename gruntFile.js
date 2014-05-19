@@ -335,7 +335,7 @@ module.exports = function ( grunt ) {
                 },
                 expand: true,
                 cwd: '<%= build_dir %>',
-                src: ['js/*.min.js', 'mock/**/*.json', 'src/**/fwk-bootstrap.js']
+                src: ['js/*.min.js']
             }
         }
 
@@ -378,7 +378,7 @@ module.exports = function ( grunt ) {
     grunt.registerTask( 'release', [
         'clean:build', 'clean:dist', 'clean:report',
         'jshint:beforeconcat',
-        'copy',
+        'copy:build_appjs', 'copy:build_jsunit', 'copy:build_mock_json',
         'html2js',
         'ngmin',
         'concat',
@@ -386,7 +386,8 @@ module.exports = function ( grunt ) {
         'karmaconfig', 'karma',
         'plato:report',
         'uglify',
-        'compress'
+        'compress',
+        'copy:dist_js', 'copy:dist_mock_json', 'copy:dist_bootstrap_js'
     ]);
 
 
@@ -421,7 +422,9 @@ module.exports = function ( grunt ) {
             process: function ( contents, path ) {
                 return grunt.template.process( contents, {
                     data: {
-                        scripts: jsFiles
+                        scripts: jsFiles,
+                        packageName: taskConfig.pkg.name,
+                        packageVersion: taskConfig.pkg.version
                     }
                 });
             }
