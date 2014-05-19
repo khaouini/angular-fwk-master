@@ -165,6 +165,27 @@ module.exports = function ( grunt ) {
 
                     }
                 ]
+            },
+            dist_mock_json: {
+                files: [
+                    {
+                        src: [ '<%= app_files.mock.json %>' ],
+                        dest: '<%= dist_dir %>/integration/src',
+                        cwd: 'src/',
+                        expand: true
+                    }
+                ]
+            },
+            dist_bootstrap_js: {
+                files: [
+                    {
+                        src: [ '<%= build_dir %>/src/commun/fwk-bootstrap.js' ],
+                        dest: '<%= dist_dir %>/integration',
+                        cwd: '.',
+                        flatten: true,
+                        expand: true
+                    }
+                ]
             }
 
         },
