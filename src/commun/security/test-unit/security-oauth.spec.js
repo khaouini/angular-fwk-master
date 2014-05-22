@@ -12,6 +12,7 @@ describe('Test oauthService module', function () {
         angular.module('test', ['fwk-security.oauth']).value('FWK_CONSTANT',
             { profile: 'MOCK',
                 idpBaseUrl: 'http://localhost:3001',
+                mockPathBase: 'src/',
                 oauth : {
                     queryStringParameters : {
                         response_type: 'token',

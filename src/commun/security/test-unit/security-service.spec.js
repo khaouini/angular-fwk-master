@@ -24,6 +24,7 @@ describe('Test authentService module', function () {
     beforeEach(function () {
         angular.module('test', ['fwk-security.service']).value('FWK_CONSTANT',
             { profile: 'MOCK',
+              mockPathBase: 'src/',
               oauth : {
                   accessToken : {
                       prefix : 'APP_0.1',

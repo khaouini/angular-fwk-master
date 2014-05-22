@@ -22,12 +22,12 @@
 
     /** Exemple de configuration à reporter sans le fichier du projet*/
 	.constant('FWK_CONSTANT', {
-	      version: '0.0.2',
+	      version: '0.0.3',
 	      profile: PROFILE_ENABLE[0],
           unauthorizedState: 'unauthorized',
           errorState: 'error',
-	      restBaseUrl: '/desote-web-springmvc-spi/web/libraire/',
 	      idpBaseUrl: 'http://localhost:3001',
+          mockPathBase: 'src/',
 	      oauth: {
 	          queryStringParameters : {
 	              response_type: 'token',

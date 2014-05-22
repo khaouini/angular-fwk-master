@@ -17,7 +17,7 @@
                         return $q.reject(fault);
                     }
 
-                	path ='src/commun/security/mock/user.json';
+                	path = FWK_CONSTANT.mockPathBase + 'commun/security/mock/user.json';
                 	headerAuth = {};
                 	request = $http.get(path, angular.extend({cache: false}, headerAuth));
                 } else {
@@ -48,7 +48,7 @@
               var path, request;
 
               if (FWK_CONSTANT.profile.toUpperCase()=== 'MOCK') {
-            	path ='src/commun/security/mock/user.json';
+            	path = FWK_CONSTANT.mockPathBase + 'commun/security/mock/user.json';
               } else {
                 path =FWK_CONSTANT.idpBaseUrl + '/users/profil';
               }
@@ -74,7 +74,7 @@
                 var path, request;
 
                 if (FWK_CONSTANT.profile.toUpperCase()=== 'MOCK') {
-                	path ='src/commun/security/mock/logout.json';
+                	path = FWK_CONSTANT.mockPathBase + 'commun/security/mock/logout.json';
                 	request = $http.get(path, {cache: false});
                 } else {
                     path =FWK_CONSTANT.idpBaseUrl + '/idp/logout';

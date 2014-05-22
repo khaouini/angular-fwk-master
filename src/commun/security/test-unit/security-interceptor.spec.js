@@ -132,6 +132,7 @@ describe('Tests responseSecurityInterceptor Module ', function() {
             config: {
                 requestTimestamp: 1400076677946,
                 url: "/rest/domaines",
+                mockPathBase: 'src/',
                 cache: {},
                 headers: {
                     Accept: "application/json",
