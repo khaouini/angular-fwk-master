@@ -11,7 +11,7 @@ module.exports = function (config) {
         files: [
             <% scripts.forEach( function ( file ) { %>'<%= file %>',
                 <% }); %>
-            'build/js/<%= packageName %>-<%= packageVersion %>.js', //TODO
+            'build/js/<%= packageName %>-<%= packageVersion %>.js',
             'build/tests/unit/**/*.spec.js'
         ],
 
