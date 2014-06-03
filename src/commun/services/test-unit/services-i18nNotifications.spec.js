@@ -46,4 +46,45 @@ describe('Tests i18nNotifications Module', function () {
         });
     });
 
+    describe('must push for current and next rouTe', function () {
+
+        it('should add a new notification for current route based on a localized message and its type', function () {
+            var notifications;
+            i18nNotifications.pushForCurrentRoute('i18n.key', 'success');
+
+            notifications = i18nNotifications.getCurrent();
+            expect(notifications.length).toEqual(1);
+            expect(notifications[0].message).toEqual('?i18n.key?');
+            expect(notifications[0].type).toEqual('success');
+        });
+
+        it('should add a new notification for next route based on a localized message and its type', function () {
+            var notifications;
+            i18nNotifications.removeAll();
+            i18nNotifications.pushForNextRoute('i18n.key', 'success');
+            // pas notification courante
+            notifications = i18nNotifications.getCurrent();
+            expect(notifications.length).toEqual(0);
+        });
+
+    });
+
+    describe('must init notification after route change event', function () {
+
+        it('should move next route to current route notification', function () {
+            var notifications;
+
+            i18nNotifications.pushForNextRoute('i18n.key', 'success');
+
+            notifications = i18nNotifications.getCurrent();
+            expect(notifications.length).toEqual(0);
+
+            i18nNotifications.onStateChangeSuccess();
+
+            notifications = i18nNotifications.getCurrent();
+            expect(notifications.length).toEqual(1);
+        });
+
+
+    });
 });

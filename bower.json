@@ -12,7 +12,7 @@
     "guillaume.dauvergne@caissedesdepots.fr"
   ],
   "private": true,
-  "dependencies": {
+  "optionalDependencies": {
     "bootstrap": "~3.0.0",
     "angular": "~1.2.16",
     "angular-resource": "~1.2.16",
