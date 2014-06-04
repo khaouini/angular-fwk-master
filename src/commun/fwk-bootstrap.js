@@ -29,6 +29,8 @@
 	      idpBaseUrl: 'http://localhost:3001',
           mockPathBase: 'src/',
 	      oauth: {
+              profilEndpoint: '/profil',
+              authorizeEndpoint : '/authorize',
 	          queryStringParameters : {
 	              response_type: 'token',
 	              client_id : 'urn:cdc:retraite:esg:ihm:1.0',
@@ -46,6 +48,11 @@
 	            response: ['\\/idp/login']
 	          }
 	      },
+          http: {
+              authenticationEndpoint: '/idp/login',
+              profilEndpoint: '/users/profil',
+              logoutEndpoint : '/idp/logout'
+          },
 	      trace : {
 	          MAX_HISTORY_SIZE: 30
 	      }

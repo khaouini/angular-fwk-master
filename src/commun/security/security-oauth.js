@@ -61,7 +61,7 @@
                             }
 
                             var queryString = angular.extend(FWK_CONSTANT.oauth.queryStringParameters, {state: state});
-                            var url =FWK_CONSTANT.idpBaseUrl + '/oauth2/auth?' + objectToQueryString(queryString);
+                            var url =FWK_CONSTANT.idpBaseUrl + FWK_CONSTANT.oauth.authorizeEndpoint + '?' + objectToQueryString(queryString);
 
                             return $http.get(url).then(
                                 //success
@@ -127,7 +127,7 @@
                         var waitFormAccessToken = $q.defer();
                         state = UUID.randomUUID();
                         var queryString = angular.extend(FWK_CONSTANT.oauth.queryStringParameters, {state: state});
-                        var url =FWK_CONSTANT.idpBaseUrl + '/oauth2/auth?' + objectToQueryString(queryString);
+                        var url = FWK_CONSTANT.idpBaseUrl + FWK_CONSTANT.oauth.authorizeEndpoint + '?' + objectToQueryString(queryString);
 
                         var popup = window.open(url, popupOptions.name, formatPopupOptions(popupOptions.openParams));
 

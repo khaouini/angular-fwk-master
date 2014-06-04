@@ -21,7 +21,7 @@
                 	headerAuth = {};
                 	request = $http.get(path, angular.extend({cache: false}, headerAuth));
                 } else {
-                    path =FWK_CONSTANT.idpBaseUrl + '/idp/login';
+                    path =FWK_CONSTANT.idpBaseUrl + FWK_CONSTANT.http.authenticationEndpoint;
                     token =  'Basic ' + Base64.encode(login + ':' + password);
                     headerAuth = {headers: {'Authorization': token} };
                     request = $http.post(path,  {}, angular.extend({cache: false}, headerAuth));
@@ -50,7 +50,7 @@
               if (FWK_CONSTANT.profile.toUpperCase()=== 'MOCK') {
             	path = FWK_CONSTANT.mockPathBase + 'commun/security/mock/user.json';
               } else {
-                path =FWK_CONSTANT.idpBaseUrl + '/users/profil';
+                path =FWK_CONSTANT.idpBaseUrl + FWK_CONSTANT.http.profilEndpoint;
               }
 
               request = $http.get(path, {cache: false});
@@ -77,7 +77,7 @@
                 	path = FWK_CONSTANT.mockPathBase + 'commun/security/mock/logout.json';
                 	request = $http.get(path, {cache: false});
                 } else {
-                    path =FWK_CONSTANT.idpBaseUrl + '/idp/logout';
+                    path =FWK_CONSTANT.idpBaseUrl + FWK_CONSTANT.http.logoutEndpoint;
                     request = $http.post(path, {},{cache: false});
                 }
 
