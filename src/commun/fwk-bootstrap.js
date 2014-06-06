@@ -1,4 +1,4 @@
-
+git
     var PROFILE_ENABLE = ['MOCK', 'MOCK-REST', 'NORMAL'];
 
 	angular.module('fwk-bootstrap', [
@@ -29,14 +29,14 @@
 	      idpBaseUrl: 'http://localhost:3001',
           mockPathBase: 'src/',
 	      oauth: {
-              profilEndpoint: '/profil',
-              authorizeEndpoint : '/authorize',
-	          queryStringParameters : {
-	              response_type: 'token',
-	              client_id : 'urn:cdc:retraite:esg:ihm:1.0',
-	              redirect_uri : 'http://desote-web-springmvc-spi/oauth2Callback.html',
-	              scope : 'urn:cdc:retraite:cli:rest:1.0, urn:cdc:retraite:set01:rest:1.0'
-	          },
+              profilEndpoint: '/oauth2/userinfo',
+              authorizeEndpoint : '/oauth2/authorize',
+              queryStringParameters : {
+                  response_type: 'token',
+                  client_id : 'gkCYi5AkJPsa7XKNfOV4uydYyz4',
+                  redirect_uri : 'http://localhost:63342/EspaceGestionnaire/app/oauth2Callback.html',
+                  scope : 'urn:cdc:retraite:cli:rest:1.0, urn:cdc:retraite:set01:rest:1.0'
+              },
 	          accessToken : {
 	              prefix : 'FWK_0.0.2',
 	              keyname : 'ACCESS_TOKEN'

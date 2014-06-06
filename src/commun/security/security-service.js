@@ -47,11 +47,12 @@
 
               var path, request;
 
-              if (FWK_CONSTANT.profile.toUpperCase()=== 'MOCK') {
+              //TODO
+              //if (FWK_CONSTANT.profile.toUpperCase()=== 'MOCK') {
             	path = FWK_CONSTANT.mockPathBase + 'commun/security/mock/user.json';
-              } else {
-                path =FWK_CONSTANT.idpBaseUrl + FWK_CONSTANT.http.profilEndpoint;
-              }
+              //} else {
+              //  path =FWK_CONSTANT.idpBaseUrl + FWK_CONSTANT.oauth.profilEndpoint;
+              //}
 
               request = $http.get(path, {cache: false});
 
