@@ -2,6 +2,9 @@
     var PROFILE_ENABLE = ['MOCK', 'MOCK-REST', 'NORMAL'];
 
 	angular.module('fwk-bootstrap', [
+      /* module crée au chargement de l'application (index.html) après récupération des donnèes auprès du serveur */
+        /* ce module contient les configs du proejt "<PROJET>_CONSTANT" ey du socle "FWK_CONSTANT"
+      '<nom du module>.config',
 	  /* module angular resource pour la gestion des entites */
 	  'ngResource',
 	  /* module angular UI route */
@@ -20,8 +23,8 @@
 	  'LocalStorageModule'
 	])
 
-    /** Exemple de configuration à reporter sans le fichier du projet*/
-	.constant('FWK_CONSTANT', {
+    /** Exemple de configuration qui sera renvoyée rpar le service de configuration du projet */
+/**	.constant('FWK_CONSTANT', {
 	      version: '0.0.4',
 	      profile: PROFILE_ENABLE[0],
           unauthorizedState: 'unauthorized',
@@ -57,7 +60,7 @@
 	          MAX_HISTORY_SIZE: 30
 	      }
 	})
-
+*/
         // Configuration des interceptors et des mpodules utilisés par le Socle AngularJS
 	.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$locationProvider', 'localStorageServiceProvider', 'FWK_CONSTANT',
       function ($httpProvider, $stateProvider, $urlRouterProvider, $locationProvider, localStorageServiceProvider, FWK_CONSTANT) {
