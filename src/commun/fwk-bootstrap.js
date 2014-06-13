@@ -25,7 +25,7 @@
 
     /** Exemple de configuration qui sera renvoyée rpar le service de configuration du projet */
 /**	.constant('FWK_CONSTANT', {
-	      version: '0.0.4',
+	      version: '0.0.5',
 	      profile: PROFILE_ENABLE[0],
           unauthorizedState: 'unauthorized',
           errorState: 'error',
