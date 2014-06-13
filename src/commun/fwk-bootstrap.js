@@ -1,5 +1,5 @@
 
-    var PROFILE_ENABLE = ['MOCK', 'MOCK-REST', 'NORMAL'];
+    //var PROFILE_ENABLE = ['MOCK', 'MOCK-REST', 'NORMAL'];
 
 	angular.module('fwk-bootstrap', [
       /* module crée au chargement de l'application (index.html) après récupération des donnèes auprès du serveur */

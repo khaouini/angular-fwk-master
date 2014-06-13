@@ -25,8 +25,8 @@
 
     angular.module('fwk-security.oauth', ['fwk-security', 'fwk-services', 'LocalStorageModule'])
 
-        .factory('oauthService', ['$http', '$log', '$q', '$window', '$rootScope', 'tokenService', 'FWK_CONSTANT', 'UUID',
-            function ($http, $log, $q, $window, $rootScope, tokenService,FWK_CONSTANT, UUID) {
+        .factory('oauthService', ['$http', '$log', '$q', '$window', '$rootScope', 'tokenService', 'FWK_CONSTANT', 'UUID', 'invalidCredentialFault', 'localizedMessages',
+            function ($http, $log, $q, $window, $rootScope, tokenService,FWK_CONSTANT, UUID, invalidCredentialFault, localizedMessages) {
 
                 var oauthRequestInProgress = false;
                 var oauthRetryQueue = [];
@@ -135,15 +135,29 @@
                         angular.element($window).bind('message', function(event) {
 
                             if (event.originalEvent.source == popup && event.originalEvent.origin == window.location.origin) {
+
                                 popup.close();
+
                                 $rootScope.$apply(function() {
+
+                                    var fault;
+
                                     if (event.originalEvent.data.access_token) {
+
+                                        //comparaison des states envoyé et reçu
+                                        var stateReceive = event.originalEvent.data.state || {};
+                                        if (state !== stateReceive) {
+                                        fault = invalidCredentialFault(localizedMessages.get('invalid_state', {}));
+                                            waitFormAccessToken.reject(fault);
+                                        }
+
                                         // stockage du jeton
                                         tokenService.storeLocalToken(event.originalEvent.data.access_token);
                                         waitFormAccessToken.resolve(event.originalEvent.data);
                                     } else {
-                                        //TODO à revoir la gestion de l'ano
-                                        waitFormAccessToken.reject(event.originalEvent.data);
+                                        fault = invalidCredentialFault(localizedMessages.get('retrieve_access_token_error', {}));
+                                        //waitFormAccessToken.reject(event.originalEvent.data);
+                                        waitFormAccessToken.reject(fault);
                                     }
                                 });
                             }
