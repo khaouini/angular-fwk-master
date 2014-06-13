@@ -37,11 +37,11 @@ Sur la base du Framework MVC AngularJS, elle adresse un certain nombre de probl�
 
 Nom : *angular-fwk-distrib*
 
-Version courante : 0.0.3 
+Version courante : 0.0.4
 
 Repository : [GitHub angular-fwk-distrib](https://github.com/mguillem37/angular-fwk-distrib.git)
 
-Fichier Javascript : `angular-fwk-dei-0.0.3.min.js` (`angular-fwk-dei-0.0.3.js`)
+Fichier Javascript : `angular-fwk-dei-0.0.4.min.js` (`angular-fwk-dei-0.0.4.js`)
 
 
 
@@ -65,5 +65,9 @@ Fichier Javascript : `angular-fwk-dei-0.0.3.min.js` (`angular-fwk-dei-0.0.3.js`)
 
 ## Génération des librairies de la distribution
 
+### montée de version
+- modif package.json
+- modif bower.json
+- modif fwk-bootstrap.js
 
 

@@ -20,9 +20,11 @@
         $scope.error = stackFault.getError();
 
         $scope.headers = [];
-        angular.forEach($scope.error.reasonOrigin.config.headers, function(key, value) {
-        	$scope.headers.push(value + ' : ' + key);
-        });
+        if ($scope.error.reasonOrigin) {
+            angular.forEach($scope.error.reasonOrigin.config.headers, function (key, value) {
+                $scope.headers.push(value + ' : ' + key);
+            });
+        }
 
         // reset des notifs éventuellement posées
         i18nNotifications.removeAll();

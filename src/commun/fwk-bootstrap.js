@@ -1,4 +1,4 @@
-git
+
     var PROFILE_ENABLE = ['MOCK', 'MOCK-REST', 'NORMAL'];
 
 	angular.module('fwk-bootstrap', [
@@ -22,7 +22,7 @@ git
 
     /** Exemple de configuration à reporter sans le fichier du projet*/
 	.constant('FWK_CONSTANT', {
-	      version: '0.0.3',
+	      version: '0.0.4',
 	      profile: PROFILE_ENABLE[0],
           unauthorizedState: 'unauthorized',
           errorState: 'error',
