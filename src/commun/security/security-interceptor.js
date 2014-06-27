@@ -60,8 +60,8 @@
             }
         ])
 
-        .factory('responseSecurityInterceptor', ['$injector', '$q', '$log', 'dateFilter', 'localizedMessages', 'restFault', 'invalidCredentialFault', 'FWK_CONSTANT', 'tokenService', 'httpLogger', 'fieldValidationFault',
-            function ($injector, $q, $log, dateFilter, localizedMessages, restFault, invalidCredentialFault,FWK_CONSTANT, tokenService, httpLogger, fieldValidationFault) {
+        .factory('responseSecurityInterceptor', ['$injector', '$q', '$log', 'dateFilter', 'localizedMessages', 'restFault', 'invalidCredentialFault', 'FWK_CONSTANT', 'tokenService', 'httpLogger', 'fieldValidationFault', 'resourceNotFoundFault',
+            function ($injector, $q, $log, dateFilter, localizedMessages, restFault, invalidCredentialFault,FWK_CONSTANT, tokenService, httpLogger, fieldValidationFault, resourceNotFoundFault) {
 
 
 	            var pushTrace = function(response, status) {
@@ -80,6 +80,13 @@
 
 	                httpLogger.pushLog(callLog);
 	            };
+
+                var throwException = function(response) {
+                    var msgErreur, fault;
+                    msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
+                    fault = restFault(msgErreur, response);
+                    throw fault;
+                };
 
 	            /**
 	             * Traitement réalisé si HTTP 400 Bad Request
@@ -104,10 +111,11 @@
 	                    fault = fieldValidationFault(msgErreur, response.data);
 	                    return $q.reject(fault);
 	                } else {
+                        return throwException(response);
 	                   //TODO Factoriser les 3 lignes ci-dessous
-	                   msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
-	                   fault = restFault(msgErreur, response);
-	                   throw fault;
+	                   //msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
+	                   //fault = restFault(msgErreur, response);
+	                   //throw fault;
 	                }
 	            };
 
@@ -116,7 +124,7 @@
 	                // HTTP 401 Unauthorized
 	                $log.debug('\t...401 detected');
 
-	                var msgErreur, fault;
+	                //var msgErreur, fault;
 
 	                //Un 401 pour une mire d'authent est normale (invalid login/password, ...), pour les autres on renégocie un jeton
 	                if (checkWhiteList(response.config.url, FWK_CONSTANT.oauth.whitelist.response)) {
@@ -151,13 +159,43 @@
 	                                    return $http(newConfig);
 	                                });
 	                    } else {
-	                        msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
-	                        fault = restFault(msgErreur, response);
-	                        throw fault;
+                            return throwException(response);
+	                        //msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
+	                        //fault = restFault(msgErreur, response);
+	                        //throw fault;
 	                    }
 	                }
 
 	            };
+
+                /**
+                 * Traitemùent réalisé si le servoce retourne une HTTP 404 not found
+                 * Deux cas de figure :
+                 *    1. l'URI employée n'existe pas : erreur technique ==> on doit renvoyer l'utilisateur vers une page d'erreur
+                 *    2. L'URI employée est correcte mais la la recherche applicative de la ressource se solde par un échec. La ressource demandée n'a pu être trouvée.
+                 *    ==> Dans ce cas, on renvoit une exception au service pour qu'il le remonte au niveau de l'IHM pour affichage de l'info.
+                 * @param response
+                 * @returns {Promise}
+                 */
+                var process404 = function(response) {
+
+                    // HTTP 404 Not Found
+                    $log.debug('\t...404 Not Found detected');
+
+                    var msgErreur, fault;
+
+                    if (response.data && response.data.typeError === 'ResourceNotFoundFault') {
+                        msgErreur = localizedMessages.get('resource.not.found', {messageFromserver: response.data.message || 'Ressource non trouvée !'});
+                        fault = resourceNotFoundFault(msgErreur, response.data);
+                        return $q.reject(fault);
+                    } else {
+                        return throwException(response);
+                        //TODO Factoriser les 3 lignes ci-dessous
+                        //msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
+                        //fault = restFault(msgErreur, response);
+                        //throw fault;
+                    }
+                };
 
 
                 var responseInterceptor = {
@@ -185,6 +223,8 @@
                                      return process400(response);
                                  case 401:
                                      return process401(response);
+                                 case 404:
+                                     return process404(response);
                                  default:
                                      var msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
                                      throw restFault(msgErreur, response);

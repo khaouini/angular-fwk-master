@@ -8,7 +8,7 @@ describe('Tests requestSecurityInterceptor Module ', function() {
     beforeEach(function () {
         angular.module('test', ['fwk-security.interceptor', 'fwk-security.oauth']).value('FWK_CONSTANT',
             { profile: 'MOCK',
-              oauth: {
+                oauth: {
                     queryStringParameters : {
                         response_type: 'token',
                         client_id : 'urn:cdc:retraite:esg:ihm:1.0',
@@ -25,10 +25,10 @@ describe('Tests requestSecurityInterceptor Module ', function() {
                         // pas de traitement particulier (401) pour ces url
                         response: ['\\/idp/login']
                     }
-              },
-              trace : {
-                MAX_HISTORY_SIZE: 3
-              }
+                },
+                trace : {
+                    MAX_HISTORY_SIZE: 3
+                }
             });
     });
 
@@ -40,10 +40,10 @@ describe('Tests requestSecurityInterceptor Module ', function() {
         interceptor = $injector.get('requestSecurityInterceptor');
         httpLogger = $injector.get('httpLogger');
         $http = $injector.get('$http');
-        wrappedPromise = {};
-        promise = {
-            then: jasmine.createSpy('then').andReturn(wrappedPromise)
-        };
+//        wrappedPromise = {};
+//        promise = {
+//            then: jasmine.createSpy('then').andReturn(wrappedPromise)
+//        };
         config = {
             url: "/idp/login",
             cache: {},
@@ -111,10 +111,12 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         httpLogger = $injector.get('httpLogger');
         $http = $injector.get('$http');
         restFault = $injector.get('restFault');
-        wrappedPromise = {};
-        promise = {
-            then: jasmine.createSpy('then').andReturn(wrappedPromise)
-        };
+        $rootScope = $injector.get('$rootScope');
+
+//        wrappedPromise = {};
+//        promise = {
+//            then: jasmine.createSpy('then').andReturn(wrappedPromise)
+        //       };
         aResponse = {
             config: {
                 requestTimestamp: 1400076677946,
@@ -160,15 +162,26 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         expect(httpLogger.getLogs().length).toBe(1);
     });
 
+
+    // HTTP 400 TESTS
     it('should response HTTP 400', function () {
+
+        var resultFault = null;
+
         interceptor.responseError(koResponse).then(null, function (fault) {
-            expect(fault).toBeDefined();
-            expect(fault.name).toBe("FieldValidationFault");
-            expect(fault.message).toBe("Problème recontré lors de la validation du formulaire par le serveur !");
-            expect(fault.fieldErrors).not.toBeNull;
-            expect(fault.fieldErrors.length).toBe(2);
-            expect(fault.fieldErrors[0].fieldname).toBe("nom");
+            resultFault=fault;
         });
+
+        // promises are resolved/dispatched only on next $digest cycle
+        $rootScope.$apply();
+
+        expect(resultFault).toBeDefined();
+        expect(resultFault.name).toBe("FieldValidationFault");
+        expect(resultFault.message).toBe("Problème recontré lors de la validation du formulaire par le serveur !");
+        expect(resultFault.fieldErrors).not.toBeNull;
+        expect(resultFault.fieldErrors.length).toBe(2);
+        expect(resultFault.fieldErrors[0].fieldname).toBe("nom");
+
         expect(httpLogger.getLogs().length).toBe(1);
     });
 
@@ -180,6 +193,8 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         expect(httpLogger.getLogs().length).toBe(1);
     });
 
+
+    // HTTP 500 TESTS
     it('should response HTTP 500', function () {
         koResponse.status = 500;
         expect(function () {
@@ -187,14 +202,24 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         }).toThrow();
     });
 
+
+    // HTTP 401 TESTS
     it('should response HTTP 401 Invalid login password', function () {
         koResponse.status = 401;
         koResponse.config.url = "/idp/login";
         koResponse.data = 'Unauthorized';
+
+        var resultFault = null;
+
         interceptor.responseError(koResponse).then(null, function (fault) {
-            expect(fault).toBeDefined();
-            expect(fault.name).toBe("InvalidCredentialFault");
+            resultFault=fault;
         });
+
+        // promises are resolved/dispatched only on next $digest cycle
+        $rootScope.$apply();
+
+        expect(resultFault).toBeDefined();
+        expect(resultFault.name).toBe("InvalidCredentialFault");
         expect(httpLogger.getLogs().length).toBe(1);
     });
 
@@ -202,10 +227,19 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         koResponse.status = 401;
         koResponse.config.url = "/idp/login";
         koResponse.data = 'autre erreur non gérée...';
+
+        var resultFault = null;
+
         interceptor.responseError(koResponse).then(null, function (fault) {
-            expect(fault).toBeDefined();
-            expect(fault.name).toBe("RestFault");
+            resultFault=fault;
         });
+
+        // promises are resolved/dispatched only on next $digest cycle
+        $rootScope.$apply();
+
+        expect(resultFault).toBeDefined();
+        expect(resultFault.name).toBe("RestFault");
+
         expect(httpLogger.getLogs().length).toBe(1);
     });
 
@@ -228,4 +262,42 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         }).toThrow();
     });
 
+
+    // HTTP 404 TESTS
+    it('should response HTTP 404 with reject promise', function () {
+
+        koResponse.status = 404;
+        koResponse.data = {
+            "message":"Le libraire est inconnu",
+            "cause": null,
+            "typeError":"ResourceNotFoundFault"
+        };
+
+        var resultFault = null;
+
+        interceptor.responseError(koResponse).then(null, function (fault) {
+            resultFault=fault;
+        });
+
+        // promises are resolved/dispatched only on next $digest cycle
+        $rootScope.$apply();
+
+        expect(resultFault).toBeDefined();
+        expect(resultFault.name).toBe("ResourceNotFoundFault");
+        expect(resultFault.message).toBe("Le libraire est inconnu");
+        expect(resultFault.cause).toBeNull();
+
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+
+    it('should response HTTP 404 with exception', function () {
+        koResponse.status = 404;
+        koResponse.data = 'Unauthorized';
+
+        expect( function() {
+            interceptor.responseError(koResponse);
+        }).toThrow();
+
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
 });

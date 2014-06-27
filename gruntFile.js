@@ -366,9 +366,16 @@ module.exports = function ( grunt ) {
 
     /**
      * Tests unitaires
+     * Génération de l'archive angular-fwk-dei-x.x.x.js sur laquelle porte les tests
      */
     grunt.registerTask( 'tests', [
-        'copy:build_jsunit', 'karmaconfig', 'karma:unit'
+        'jshint:beforeconcat',
+        'copy:build_appjs','copy:build_jsunit',
+        'html2js',
+        'ngmin',
+        'concat',
+        'jshint:afterconcat',
+        'karmaconfig', 'karma:unit'
     ]);
 
     /**

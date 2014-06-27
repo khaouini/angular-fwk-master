@@ -16,5 +16,6 @@
 	    'trace.request.msg': '{{dateTime}} - REQUEST TO {{url}} - X-REQUEST-ID : {{uuid}}',
 	    'trace.response.msg': '{{dateTime}} - RESPONSE [{{type}} / {{status}}] FROM {{url}} - X-REQUEST-ID : {{uuid}} - DUREE : {{delay}} secondes',
         'retrieve_access_token_error' : 'Problème rencontré lors de l\'extraction de l\'access_token',
-        'invalid_state' : 'Problème rencontré lors de la comparaison des paramètres state'
+        'invalid_state' : 'Problème rencontré lors de la comparaison des paramètres state',
+        'resource.not.found' : '{{messageFromserver}}'
 	});

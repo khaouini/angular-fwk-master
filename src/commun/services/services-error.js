@@ -35,6 +35,15 @@
         };
     };
 
+    var ResourceNotFoundFault = function(msgFault, resourceNotFoundFault) {
+        this.name = resourceNotFoundFault.typeError;
+        this.message =  resourceNotFoundFault.message;
+        this.cause = resourceNotFoundFault.cause;
+        this.toString = function () {
+            return this.name + ' / ' + this.message + ' / ' + this.cause;
+        };
+    };
+
 
     angular.module('fwk-services.error', [])
 
@@ -62,6 +71,15 @@
             	FieldValidationFault.prototype = new Error();
             	FieldValidationFault.prototype.constructor = FieldValidationFault;
                 return new FieldValidationFault(msgFault, fieldErrorException);
+            };
+        })
+
+        .factory('resourceNotFoundFault',function () {
+
+            return function(msgFault, resourceNotFoundException) {
+                ResourceNotFoundFault.prototype = new Error();
+                ResourceNotFoundFault.prototype.constructor = ResourceNotFoundFault;
+                return new ResourceNotFoundFault(msgFault, resourceNotFoundException);
             };
         })
 
