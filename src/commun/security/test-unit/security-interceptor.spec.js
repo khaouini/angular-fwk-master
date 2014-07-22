@@ -300,4 +300,40 @@ describe('Tests responseSecurityInterceptor Module ', function() {
 
         expect(httpLogger.getLogs().length).toBe(1);
     });
+
+    // HTTP 403 TESTS
+    it('should response HTTP 403 with reject promise', function () {
+
+        koResponse.status = 403;
+        koResponse.data = {
+            typeError:"AccessDeniedFault",
+            message: "access denied"
+        };
+
+        var resultFault = null;
+
+        interceptor.responseError(koResponse).then(null, function (fault) {
+            resultFault=fault;
+        });
+
+        // promises are resolved/dispatched only on next $digest cycle
+        $rootScope.$apply();
+
+        expect(resultFault).toBeDefined();
+        expect(resultFault.name).toBe("AccessDeniedFault");
+        expect(resultFault.cause).toBe("access denied");
+
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+
+    it('should response HTTP 403 with exception', function () {
+        koResponse.status = 403;
+        koResponse.data = 'Unauthorized';
+
+        expect( function() {
+            interceptor.responseError(koResponse);
+        }).toThrow();
+
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
 });

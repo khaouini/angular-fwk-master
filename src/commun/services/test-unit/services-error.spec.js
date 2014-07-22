@@ -3,7 +3,7 @@
  */
 describe('Test UUID module', function () {
 
-    var restFault, invalidCredentialFault, fieldValidationFault;
+    var restFault, invalidCredentialFault, fieldValidationFault, accessDeniedFault;
 
 
     beforeEach(function () {
@@ -14,6 +14,7 @@ describe('Test UUID module', function () {
         restFault = $injector.get('restFault');
         invalidCredentialFault = $injector.get('invalidCredentialFault');
         fieldValidationFault = $injector.get('fieldValidationFault') ;
+        accessDeniedFault = $injector.get('accessDeniedFault') ;
     }));
 
     it('should exist restFault', function () {
@@ -57,6 +58,18 @@ describe('Test UUID module', function () {
         expect(anInvalidCredentialFault.fieldErrors.length).toBe(2);
         expect(anInvalidCredentialFault.fieldErrors[0].fieldname).toBe("nom");
         expect(anInvalidCredentialFault.toString()).toBe("FIELD_VALIDATION_ERROR / Problème recontré lors de la validation du formulaire par le serveur !");
+    });
+
+    it('should create an accessDeniedFault', function () {
+        var anAaccessDeniedFault = accessDeniedFault(
+            'Vous ne disposez pas des droits suffisants pour accéder à cette ressource !',
+            {
+                typeError:"UnauthorizedFault",
+                message: "access denied"
+            });
+        expect(anAaccessDeniedFault.name).toBe("UnauthorizedFault");
+        expect(anAaccessDeniedFault.message).toBe("Vous ne disposez pas des droits suffisants pour accéder à cette ressource !");
+        expect(anAaccessDeniedFault.cause).toBe("access denied");
     });
 
 });

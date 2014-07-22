@@ -44,6 +44,14 @@
         };
     };
 
+    var AccessDeniedFault = function(msgFault, accessDeniedFault) {
+        this.name = accessDeniedFault.typeError;
+        this.message =  msgFault;
+        this.cause = accessDeniedFault.message;
+        this.toString = function () {
+            return this.name + ' / ' + this.message;
+        };
+    };
 
     angular.module('fwk-services.error', [])
 
@@ -80,6 +88,15 @@
                 ResourceNotFoundFault.prototype = new Error();
                 ResourceNotFoundFault.prototype.constructor = ResourceNotFoundFault;
                 return new ResourceNotFoundFault(msgFault, resourceNotFoundException);
+            };
+        })
+
+        .factory('accessDeniedFault',function () {
+
+            return function(msgFault, accessDeniedException) {
+                ResourceNotFoundFault.prototype = new Error();
+                ResourceNotFoundFault.prototype.constructor = AccessDeniedFault;
+                return new AccessDeniedFault(msgFault, accessDeniedException);
             };
         })
 

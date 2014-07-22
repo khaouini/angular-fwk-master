@@ -60,8 +60,8 @@
             }
         ])
 
-        .factory('responseSecurityInterceptor', ['$injector', '$q', '$log', 'dateFilter', 'localizedMessages', 'restFault', 'invalidCredentialFault', 'FWK_CONSTANT', 'tokenService', 'httpLogger', 'fieldValidationFault', 'resourceNotFoundFault',
-            function ($injector, $q, $log, dateFilter, localizedMessages, restFault, invalidCredentialFault,FWK_CONSTANT, tokenService, httpLogger, fieldValidationFault, resourceNotFoundFault) {
+        .factory('responseSecurityInterceptor', ['$injector', '$q', '$log', 'dateFilter', 'localizedMessages', 'restFault', 'invalidCredentialFault', 'FWK_CONSTANT', 'tokenService', 'httpLogger', 'fieldValidationFault', 'resourceNotFoundFault', 'accessDeniedFault',
+            function ($injector, $q, $log, dateFilter, localizedMessages, restFault, invalidCredentialFault,FWK_CONSTANT, tokenService, httpLogger, fieldValidationFault, resourceNotFoundFault, accessDeniedFault) {
 
 
 	            var pushTrace = function(response, status) {
@@ -160,14 +160,32 @@
 	                                });
 	                    } else {
                             return throwException(response);
-	                        //msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
-	                        //fault = restFault(msgErreur, response);
-	                        //throw fault;
 	                    }
 	                }
 
 	            };
 
+                /**
+                 * L'utilisateur ne dispose pas des droits suffisants pour accéder au service.
+                 * Les droits de l'applications AngularJS sont vérifiés via le Jeton OAUTH au niveau du SPS
+                 * @param response
+                 * @returns {Promise}
+                 */
+                var process403 = function(response) {
+
+                    // HTTP 404 Forbidden
+                    $log.debug('\t...403 Forbidden');
+
+                    var msgErreur, fault;
+
+                    if (response.data && response.data.typeError === 'AccessDeniedFault') {
+                        msgErreur = localizedMessages.get('resource.access.denied', {});
+                        fault = accessDeniedFault(msgErreur, response.data);
+                        return $q.reject(fault);
+                    } else {
+                        return throwException(response);
+                    }
+                };
                 /**
                  * Traitemùent réalisé si le servoce retourne une HTTP 404 not found
                  * Deux cas de figure :
@@ -190,10 +208,6 @@
                         return $q.reject(fault);
                     } else {
                         return throwException(response);
-                        //TODO Factoriser les 3 lignes ci-dessous
-                        //msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
-                        //fault = restFault(msgErreur, response);
-                        //throw fault;
                     }
                 };
 
@@ -223,6 +237,8 @@
                                      return process400(response);
                                  case 401:
                                      return process401(response);
+                                 case 403:
+                                     return process403(response);
                                  case 404:
                                      return process404(response);
                                  default:
