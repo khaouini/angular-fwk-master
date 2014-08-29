@@ -1,79 +1,40 @@
 
-    //var PROFILE_ENABLE = ['MOCK', 'MOCK-REST', 'NORMAL'];
+    // Exemple de chargement manuel de bootstrap
+    // La configuration de l'application et du FWK est récupérée via un appel REST.
+    // Donne lieu à la création de deux CONSTANT au sens AngularJS
+    angular.element(document).ready(function() {
 
-	angular.module('fwk-bootstrap', [
-      /* module crée au chargement de l'application (index.html) après récupération des donnèes auprès du serveur */
-        /* ce module contient les configs du proejt "<PROJET>_CONSTANT" ey du socle "FWK_CONSTANT"
-      '<nom du module>.config',
+        var initInjector = angular.injector([ 'ng' ]);
+        var $http = initInjector.get('$http');
+
+        $http.get("http://localhost:3000/configuration").then(function(response) {
+            var parametres = response.data;
+            angular.module('statsSps.config', [])
+                .constant('STATS_SPS_CONSTANT', parametres.app_constant)
+                .constant('FWK_CONSTANT', parametres.fwk_constant);
+            angular.bootstrap(document, [ 'statsSps' ]);
+        });
+    });
+
+    // Exemple de profile
+    //var PROFILE_ENABLE = ['DEBUG', 'MOCK', 'NORMAL'];
+
+
+	angular.module('my-app', [
 	  /* module angular resource pour la gestion des entites */
 	  'ngResource',
 	  /* module angular UI route */
 	  'ui.route',
-  	  /* modules dédiés à la sécurité */
-	  'fwk-security',
-	  /* modules utilitaires */
-	  'fwk-services',
-	  'fwk-i18n.messages',
-	  'fwk-directives',
-	  /* modules de scenarios commun (controler, ...) */
-      'fwk-common-state-uc',
-	  /* template html sous forme de js */
-	  'fwk-templates',
-	  /* local storage pour le stockage du jeton jwt */
-	  'LocalStorageModule'
+      /* Module embarquant la déclaration  de tous les modules du FWK */
+      'fwk-angular.bootstrap'
 	])
 
-    /** Exemple de configuration qui sera renvoyée rpar le service de configuration du projet */
-/**	.constant('FWK_CONSTANT', {
-	      version: '0.0.5',
-	      profile: PROFILE_ENABLE[0],
-          unauthorizedState: 'unauthorized',
-          errorState: 'error',
-	      idpBaseUrl: 'http://localhost:3001',
-          mockPathBase: 'src/',
-	      oauth: {
-              profilEndpoint: '/oauth2/userinfo',
-              authorizeEndpoint : '/oauth2/authorize',
-              queryStringParameters : {
-                  response_type: 'token',
-                  client_id : 'gkCYi5AkJPsa7XKNfOV4uydYyz4',
-                  redirect_uri : 'http://localhost:63342/EspaceGestionnaire/app/oauth2Callback.html',
-                  scope : 'urn:cdc:retraite:cli:rest:1.0, urn:cdc:retraite:set01:rest:1.0'
-              },
-	          accessToken : {
-	              prefix : 'FWK_0.0.2',
-	              keyname : 'ACCESS_TOKEN'
-	          },
-	          whitelist : {
-	            // pas  d'ajout de jeton JWT pour ces urls
-	            request : ['\\/idp\\/login','\\/idp\\/logout', '\\/oauth2\\/auth', '\\w+\\.tpl.html$', '\\w+\\.json$'],
-	            // pas de traitement particulier (401) pour ces url
-	            response: ['\\/idp/login']
-	          }
-	      },
-          http: {
-              authenticationEndpoint: '/idp/login',
-              profilEndpoint: '/users/profil',
-              logoutEndpoint : '/idp/logout'
-          },
-	      trace : {
-	          MAX_HISTORY_SIZE: 30
-	      }
-	})
-*/
-        // Configuration des interceptors et des mpodules utilisés par le Socle AngularJS
-	.config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$locationProvider', 'localStorageServiceProvider', 'FWK_CONSTANT',
-      function ($httpProvider, $stateProvider, $urlRouterProvider, $locationProvider, localStorageServiceProvider, FWK_CONSTANT) {
-
-		$locationProvider.html5Mode(false);
-
-		localStorageServiceProvider.setPrefix(FWK_CONSTANT.oauth.accessToken.prefix);
-        localStorageServiceProvider.setStorageType('sessionStorage');
-
-        $httpProvider.interceptors.push('requestSecurityInterceptor');
-        $httpProvider.interceptors.push('responseSecurityInterceptor');
-
-	}])
+    // Exemple utilisation d'un localStorageServiceProvider différent pour l'application
+    .config(['localStorageServiceProvider', 'STATS_SPS_CONSTANT',
+        function (appLocalStorageServiceProvider, STATS_SPS_CONSTANT) {
+            appLocalStorageServiceProvider.setPrefix(STATS_SPS_CONSTANT.prefix + "-" + STATS_SPS_CONSTANT.version);
+            appLocalStorageServiceProvider.setStorageType('localStorage');
+    }])
 
     /** Exemple de configuration à reporter sans le fichier du projet*/
 	.run(['$rootScope', '$state', '$stateParams', '$log', '$locale', 'authentService', 'i18nNotifications', 'FWK_CONSTANT',

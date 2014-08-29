@@ -202,7 +202,8 @@ module.exports = function ( grunt ) {
             fwk: {
                 options: {
                     // ce path est oté du nom du template
-                    base: 'src/views'
+                    base: 'src/views',
+                    module: 'fwk-templates'
                 },
                 src: [ '<%= app_files.tpl %>' ],
                 dest: '<%= build_dir %>/src/fwk-templates.js'

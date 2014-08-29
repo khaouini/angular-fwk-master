@@ -43,7 +43,7 @@
                     retrieveToken: function () {
 
                         $log.debug('OAUTHService retrieveToken()....');
-                        //s'l n'y a pas de demande de renouvellement de jeton en cour...
+                        //s'l n'y a pas de demande de renouvellement de jeton en cours...
                         if (!oauthRequestInProgress) {
 
                             oauthRequestInProgress = true;
