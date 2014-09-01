@@ -9,10 +9,10 @@
 
         $http.get("http://localhost:3000/configuration").then(function(response) {
             var parametres = response.data;
-            angular.module('statsSps.config', [])
+            angular.module('my-app.config', [])
                 .constant('STATS_SPS_CONSTANT', parametres.app_constant)
                 .constant('FWK_CONSTANT', parametres.fwk_constant);
-            angular.bootstrap(document, [ 'statsSps' ]);
+            angular.bootstrap(document, [ 'my-app' ]);
         });
     });
 
@@ -21,19 +21,21 @@
 
 
 	angular.module('my-app', [
+      'my-app.config',
 	  /* module angular resource pour la gestion des entites */
 	  'ngResource',
 	  /* module angular UI route */
 	  'ui.route',
+      /* local storage utillsé par l'application ou le socle DEI */
+      'LocalStorageModule',
       /* Module embarquant la déclaration  de tous les modules du FWK */
       'fwk-angular.bootstrap'
 	])
 
-    // Exemple utilisation d'un localStorageServiceProvider différent pour l'application
     .config(['localStorageServiceProvider', 'STATS_SPS_CONSTANT',
         function (appLocalStorageServiceProvider, STATS_SPS_CONSTANT) {
             appLocalStorageServiceProvider.setPrefix(STATS_SPS_CONSTANT.prefix + "-" + STATS_SPS_CONSTANT.version);
-            appLocalStorageServiceProvider.setStorageType('localStorage');
+            appLocalStorageServiceProvider.setStorageType('sessionStorage');
     }])
 
     /** Exemple de configuration à reporter sans le fichier du projet*/

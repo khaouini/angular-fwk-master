@@ -41,7 +41,7 @@ Version courante : 0.0.7
 
 Repository : [GitHub angular-fwk-distrib](https://github.com/mguillem37/angular-fwk-distrib.git)
 
-Fichier Javascript : `angular-fwk-dei-0.0.7.min.js` (`angular-fwk-dei-0.0.7.js`)
+Fichier Javascript : `angular-fwk-dei-0.0.8.min.js` (`angular-fwk-dei-0.0.7.js`)
 
 
 
