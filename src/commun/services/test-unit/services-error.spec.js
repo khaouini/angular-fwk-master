@@ -3,7 +3,7 @@
  */
 describe('Test UUID module', function () {
 
-    var restFault, invalidCredentialFault, fieldValidationFault, accessDeniedFault;
+    var restFault, invalidCredentialFault, fieldValidationFault, accessDeniedFault, resourceStateChangedFault;
 
 
     beforeEach(function () {
@@ -15,6 +15,7 @@ describe('Test UUID module', function () {
         invalidCredentialFault = $injector.get('invalidCredentialFault');
         fieldValidationFault = $injector.get('fieldValidationFault') ;
         accessDeniedFault = $injector.get('accessDeniedFault') ;
+        resourceStateChangedFault = $injector.get('resourceStateChangedFault') ;
     }));
 
     it('should exist restFault', function () {
@@ -70,6 +71,19 @@ describe('Test UUID module', function () {
         expect(anAaccessDeniedFault.name).toBe("UnauthorizedFault");
         expect(anAaccessDeniedFault.message).toBe("Vous ne disposez pas des droits suffisants pour accéder à cette ressource !");
         expect(anAaccessDeniedFault.cause).toBe("access denied");
+    });
+
+    it('should create an resourceStateChangedFault', function () {
+        var anResourceStateChangedFault = resourceStateChangedFault(
+            'L\'état de la ressource a été modifié par un autre utilisateur !',
+            {
+                "typeError": "ResourceStateChangedFault",
+                "message" : "Le librairie a été mis à jour par un autre utilisateur",
+                "cause" : "Date Maj : 03/09/2014 à 18H25 par John Doe"
+            });
+        expect(anResourceStateChangedFault.name).toBe("ResourceStateChangedFault");
+        expect(anResourceStateChangedFault.message).toBe("Le librairie a été mis à jour par un autre utilisateur");
+        expect(anResourceStateChangedFault.cause).toBe("Date Maj : 03/09/2014 à 18H25 par John Doe");
     });
 
 });

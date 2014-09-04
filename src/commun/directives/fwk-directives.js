@@ -58,6 +58,12 @@
                     angular.element("input[name=" + $scope.exceptionFromServer.fieldErrors[0].fieldname + "]").focus();
                 });
 
+                // Cas d'un HTTP 409 Conflict : la demande de modification a échouée car un autre utilisateur l'a mise à jour entre deux
+                $scope.$on('$resourceStateChangedException', function(event, exception) {
+                    //l'exception est du type FieldValidationFault remontée par l'interceptor
+                    $scope.exceptionFromServer = exception;
+                });
+
             }
         };
     });

@@ -12,6 +12,7 @@
         this.name = 'RestFault';
         this.message = msgFault || 'Problème d\'accès au service REST';
         this.reasonOrigin = reasonFault || undefined;
+        this.cause = '';
         this.toString = function() {
             return this.name + ' / ' + this.message;
         };
@@ -21,6 +22,7 @@
     var InvalidCredentialFault = function(msgFault) {
         this.name = 'InvalidCredentialFault';
         this.message = msgFault || 'Problème lors de l\'authentifrication';
+        this.cause = '';
         this.toString = function () {
             return this.name + ' / ' + this.message;
         };
@@ -30,24 +32,34 @@
         this.name = fieldErrorException.typeError;
         this.message =  msgFault || 'Problème recontré lors de la validation des champs par le serveur';
         this.fieldErrors = fieldErrorException.fieldErrors;
+        this.cause = '';
         this.toString = function () {
             return this.name + ' / ' + this.message;
         };
     };
 
-    var ResourceNotFoundFault = function(msgFault, resourceNotFoundFault) {
-        this.name = resourceNotFoundFault.typeError;
-        this.message =  resourceNotFoundFault.message;
-        this.cause = resourceNotFoundFault.cause;
+    var ResourceNotFoundFault = function(msgFault, resourceNotFoundException) {
+        this.name = resourceNotFoundException.typeError;
+        this.message =  msgFault;
+        this.cause = resourceNotFoundException.cause || '';
         this.toString = function () {
             return this.name + ' / ' + this.message + ' / ' + this.cause;
         };
     };
 
-    var AccessDeniedFault = function(msgFault, accessDeniedFault) {
-        this.name = accessDeniedFault.typeError;
+    var AccessDeniedFault = function(msgFault, accessDeniedException) {
+        this.name = accessDeniedException.typeError;
         this.message =  msgFault;
-        this.cause = accessDeniedFault.message;
+        this.cause = accessDeniedException.message || '';
+        this.toString = function () {
+            return this.name + ' / ' + this.message;
+        };
+    };
+
+    var ResourceStateChangedFault = function(msgFault, resourceStateChangedException) {
+        this.name = resourceStateChangedException.typeError;
+        this.message =  resourceStateChangedException.message;
+        this.cause = resourceStateChangedException.cause || '';
         this.toString = function () {
             return this.name + ' / ' + this.message;
         };
@@ -94,9 +106,18 @@
         .factory('accessDeniedFault',function () {
 
             return function(msgFault, accessDeniedException) {
-                ResourceNotFoundFault.prototype = new Error();
-                ResourceNotFoundFault.prototype.constructor = AccessDeniedFault;
+                AccessDeniedFault.prototype = new Error();
+                AccessDeniedFault.prototype.constructor = AccessDeniedFault;
                 return new AccessDeniedFault(msgFault, accessDeniedException);
+            };
+        })
+
+        .factory('resourceStateChangedFault',function () {
+
+            return function(msgFault, resourceStateChangedException) {
+                ResourceStateChangedFault.prototype = new Error();
+                ResourceStateChangedFault.prototype.constructor = ResourceStateChangedFault;
+                return new ResourceStateChangedFault(msgFault, resourceStateChangedException);
             };
         })
 

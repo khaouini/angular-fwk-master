@@ -18,5 +18,6 @@
         'retrieve_access_token_error' : 'Problème rencontré lors de l\'extraction de l\'access_token',
         'invalid_state' : 'Problème rencontré lors de la comparaison des paramètres state',
         'resource.not.found' : '{{messageFromserver}}',
-        'resource.access.denied' : 'Vous ne disposez pas des droits suffisants pour accéder à cette ressource !'
+        'resource.access.denied' : 'Vous ne disposez pas des droits suffisants pour accéder à cette ressource !',
+        'resource.conflict': 'L\'état de la ressource a été modifié par un autre utilisateur !'
 	});

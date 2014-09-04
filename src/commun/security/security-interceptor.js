@@ -60,8 +60,8 @@
             }
         ])
 
-        .factory('responseSecurityInterceptor', ['$injector', '$q', '$log', 'dateFilter', 'localizedMessages', 'restFault', 'invalidCredentialFault', 'FWK_CONSTANT', 'tokenService', 'httpLogger', 'fieldValidationFault', 'resourceNotFoundFault', 'accessDeniedFault',
-            function ($injector, $q, $log, dateFilter, localizedMessages, restFault, invalidCredentialFault,FWK_CONSTANT, tokenService, httpLogger, fieldValidationFault, resourceNotFoundFault, accessDeniedFault) {
+        .factory('responseSecurityInterceptor', ['$injector', '$q', '$log', 'dateFilter', 'localizedMessages', 'restFault', 'invalidCredentialFault', 'FWK_CONSTANT', 'tokenService', 'httpLogger', 'fieldValidationFault', 'resourceNotFoundFault', 'accessDeniedFault', 'resourceStateChangedFault',
+            function ($injector, $q, $log, dateFilter, localizedMessages, restFault, invalidCredentialFault,FWK_CONSTANT, tokenService, httpLogger, fieldValidationFault, resourceNotFoundFault, accessDeniedFault, resourceStateChangedFault) {
 
 
 	            var pushTrace = function(response, status) {
@@ -112,10 +112,6 @@
 	                    return $q.reject(fault);
 	                } else {
                         return throwException(response);
-	                   //TODO Factoriser les 3 lignes ci-dessous
-	                   //msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
-	                   //fault = restFault(msgErreur, response);
-	                   //throw fault;
 	                }
 	            };
 
@@ -173,7 +169,7 @@
                  */
                 var process403 = function(response) {
 
-                    // HTTP 404 Forbidden
+                    // HTTP 403 Forbidden
                     $log.debug('\t...403 Forbidden');
 
                     var msgErreur, fault;
@@ -211,6 +207,28 @@
                     }
                 };
 
+                /**
+                 * HTTP 409 Conflict
+                 * Traitement réponse HTTP 409, ie la demande de mise à jour est rejetée
+                 * par le serveur car un autre utilisateur à déja modifié la meme ressource
+                 * @param response
+                 * @returns {Promise}
+                 */
+                var process409 = function(response) {
+
+                    // HTTP 409 Not Found
+                    $log.debug('\t...409 Not Found detected');
+
+                    var msgErreur, fault;
+
+                    if (response.data && response.data.typeError === 'ResourceStateChangedFault') {
+                        msgErreur = localizedMessages.get('resource.conflict', {messageFromserver: response.data.message || 'La ressource a déjà été modifiée par u autre utilisateur!'});
+                        fault = resourceStateChangedFault(msgErreur, response.data);
+                        return $q.reject(fault);
+                    } else {
+                        return throwException(response);
+                    }
+                };
 
                 var responseInterceptor = {
 
@@ -241,6 +259,8 @@
                                      return process403(response);
                                  case 404:
                                      return process404(response);
+                                 case 409:
+                                     return process409(response);
                                  default:
                                      var msgErreur = localizedMessages.get('resource.error.server', {resourcename: response.config.url});
                                      throw restFault(msgErreur, response);

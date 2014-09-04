@@ -285,7 +285,6 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         expect(resultFault).toBeDefined();
         expect(resultFault.name).toBe("ResourceNotFoundFault");
         expect(resultFault.message).toBe("Le libraire est inconnu");
-        expect(resultFault.cause).toBeNull();
 
         expect(httpLogger.getLogs().length).toBe(1);
     });
@@ -328,6 +327,43 @@ describe('Tests responseSecurityInterceptor Module ', function() {
 
     it('should response HTTP 403 with exception', function () {
         koResponse.status = 403;
+        koResponse.data = 'Unauthorized';
+
+        expect( function() {
+            interceptor.responseError(koResponse);
+        }).toThrow();
+
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+
+    // HTTP 409 Conflict TESTS
+    it('should response HTTP 409 with reject promise', function () {
+
+        koResponse.status = 409;
+        koResponse.data = {
+            "typeError": "ResourceStateChangedFault",
+            "message" : "Le librairie a été mis à jour par un autre utilisateur",
+            "cause" : "Date Maj : 03/09/2014 à 18H25 par John Doe"
+        };
+
+        var resultFault = null;
+
+        interceptor.responseError(koResponse).then(null, function (fault) {
+            resultFault=fault;
+        });
+
+        // promises are resolved/dispatched only on next $digest cycle
+        $rootScope.$apply();
+
+        expect(resultFault).toBeDefined();
+        expect(resultFault.name).toBe("ResourceStateChangedFault");
+        expect(resultFault.message).toBe("Le librairie a été mis à jour par un autre utilisateur");
+
+        expect(httpLogger.getLogs().length).toBe(1);
+    });
+
+    it('should response HTTP 409 with exception', function () {
+        koResponse.status = 409;
         koResponse.data = 'Unauthorized';
 
         expect( function() {
