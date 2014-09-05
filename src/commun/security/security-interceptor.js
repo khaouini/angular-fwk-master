@@ -115,6 +115,13 @@
 	                }
 	            };
 
+                /**
+                 * HTTP 401 unauthorized
+                 * Renvoyer par l'idp. Plusieurs raisons : jeton invalide, expiré, absent, corrompu, ...etc
+                 * Ici prise en charge des code retour de WSO2
+                 * @param response
+                 * @returns {*}
+                 */
 	            var process401 = function(response) {
 
 	                // HTTP 401 Unauthorized
@@ -122,7 +129,7 @@
 
 	                //var msgErreur, fault;
 
-	                //Un 401 pour une mire d'authent est normale (invalid login/password, ...), pour les autres on renégocie un jeton
+	                //Un 401 pour une mire d'authent avec une HTTP basic Authent est normale (invalid login/password, ...), pour les autres on renégocie un jeton
 	                if (checkWhiteList(response.config.url, FWK_CONSTANT.oauth.whitelist.response)) {
 
 	                    // pour les whites list (ex mire de login) on laisse l'erreur se progager et remontée vers la couche appelante
@@ -138,13 +145,15 @@
 	                    var $http = $injector.get('$http');
 	                    var oauthService = $injector.get('oauthService');
 
+                        // Traitement des codes retours de WSO2
 	                    // HTTP 401 pris en charge :
-	                    //   - pas de jeton envoyé
-	                    //   - jeton expiré
-	                    // Attention HTTP 401 invalid_token n'est pris en charge que dans le cas d'un jeton expriré...pour les autres
-	                    // cas (jetons non valides, pb signature, mal formés) ils remontent en anos graves
-	                    if ((response.data.error.code === 'invalid_token' && response.data.error.message === 'jwt expired') ||
-	                         response.data.error.code === 'credentials_required') {
+	                    // {"typeError":"900902","message":"Missing Credentials"}
+                        // {"typeError":"900903","message":"Access Token Expired"}
+                        // {"typeError":"900904","message":"Access Token Inactive"}
+	                    if (response.data.typeError && (
+                                response.data.typeError === '900902' ||
+                                response.data.typeError === '900903' ||
+                                response.data.typeError === '900904')) {
 
 	                        $log.debug('\t...demande de renouvellement du jeton');
 	                        //renvoi d'une promise avec récup du jeton + ressoumission de la requette
@@ -155,6 +164,7 @@
 	                                    return $http(newConfig);
 	                                });
 	                    } else {
+                            // {"typeError":"900901","message":"Invalid Credentials"} + autres codes listés ici : https://docs.wso2.com/display/AM170/Error+Handling
                             return throwException(response);
 	                    }
 	                }

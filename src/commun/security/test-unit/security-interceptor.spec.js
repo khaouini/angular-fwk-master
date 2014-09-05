@@ -185,7 +185,7 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         expect(httpLogger.getLogs().length).toBe(1);
     });
 
-    it('should response HTTP 400 with expcetion', function () {
+    it('should response HTTP 400 with exception', function () {
         koResponse.data = 'Unauthorized';
         expect( function() {
             interceptor.responseError(koResponse);
@@ -243,14 +243,12 @@ describe('Tests responseSecurityInterceptor Module ', function() {
         expect(httpLogger.getLogs().length).toBe(1);
     });
 
-    it('should response HTTP 401 absence de jeton JWT', function () {
+    it('should response HTTP 401 absence de jeton JWT WSO2', function () {
         koResponse.status = 401;
-        koResponse.data = {
-            error: {
-                code: 'credentials_required'
-            }
-        };
-        //en mode MOCK retrieveToken retourne un jeton sans accès  au service
+        koResponse.config.url = "/rest/domaines";
+        koResponse.data = {"typeError":"900902","message":"Missing Credentials"}
+        //A NOTER : en mode MOCK, la méthode retrieveToken retourne un jeton sans accès  au service OAUTH.
+        // On s'assure simplement que l'interceptor retourne une promise (ici $http(config) )
         expect(interceptor.responseError(koResponse)).toBeDefined();
 
     });
