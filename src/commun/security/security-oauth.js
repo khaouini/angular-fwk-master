@@ -181,7 +181,7 @@
                         //$log.debug('\t OAUTH TOKEN storeLocalToken()....');
                         var tokenStorage = {
                             accessToken : accessToken,
-                            state: state,
+                            sessionID: FWK_CONSTANT.x_session_id,
                             dateCreated: new Date().getTime()
                         };
                         localStorageService.set(FWK_CONSTANT.oauth.accessToken.keyname, tokenStorage);

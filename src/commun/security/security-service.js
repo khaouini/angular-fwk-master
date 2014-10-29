@@ -3,8 +3,8 @@
  */
     angular.module('fwk-security.service', ['fwk-services', 'fwk-security'])
 
-        .factory('authentService', ['$http', '$q', '$log', '$rootScope', 'userService', 'localizedMessages', 'FWK_CONSTANT', 'Base64', 'tokenService', 'oauthService', 'invalidCredentialFault','dateFilter',
-            function ($http, $q, $log, $rootScope, userService, localizedMessages,FWK_CONSTANT, Base64, tokenService, oauthService, invalidCredentialFault, dateFilter) {
+        .factory('authentService', ['$http', '$q', '$log', '$rootScope', 'userService', 'localizedMessages', 'FWK_CONSTANT', 'Base64', 'tokenService', 'oauthService', 'invalidCredentialFault','dateFilter', 'UUID',
+            function ($http, $q, $log, $rootScope, userService, localizedMessages,FWK_CONSTANT, Base64, tokenService, oauthService, invalidCredentialFault, dateFilter, UUID) {
 
             var processLogin = function (login, password)  {
 
@@ -82,8 +82,6 @@
                     request = $http.post(path, {},{cache: false});
                 }
 
-                //request = $http.post(path, {},{cache: false});
-
                 return request.then(
                     //success
                     function (response) {
@@ -125,6 +123,47 @@
                     return processLogin(login, password)
                         .then( oauthService.retrieveToken);
                   },
+
+                // Cinématique prise en charge par IDP OAUTH sans besoin de popup
+                // L'application redirige d'abod l'utilisateur vers l'IDP (URL implicit flow forgée par le serveur)
+                // qui lui propose une mire aux couleurs du projet. Une fois authentifié, la page de callback est appelée.
+                // Cette dernière extrait l'access token puis appelle immédiatement l'application afin de récupérer le
+                // lanceur de l'application. L'appliaction renvoi la page du lanceur si et seulement si l'acces token envoyé
+                // est valide ! Ce qui implique que seuls les utilisateurs authentifiés ont acces au coeur applicatif. A noter
+                // que le lanceur (fragment html) contient des varaiobles javascript reprenant le profile de l'utilisateur,
+                // l'access token, un identifiant des session et le paramétrage de l'application (ce qui évite des appels rest inutil) !
+                // Dans cette cinématique, la phase de login consiste donc simplement à enregistrer le jeton et à positionner le profile de l'utiliteur.
+
+                silentLogin: function (activeProfile, accessToken, sessionID) {
+
+                    // Controle paramètre activeProfile
+                    if (! angular.isObject(activeProfile)) {
+                        throw invalidCredentialFault(localizedMessages.get('active.profile.not.found', {}));
+                    }
+
+                    //Controle du paramètre accessToken
+                    if( (typeof accessToken == "undefined") ||
+                        (accessToken == null ) ||
+                        (typeof accessToken.valueOf() != "string") ||
+                        (accessToken.length == 0)) {
+                        throw invalidCredentialFault(localizedMessages.get('access.token.not.found', {}));
+                    }
+
+                    if ( (typeof sessionID == "undefined") || (sessionID == null) ) {
+                        // on génère un sessionID si non fourni par défaut !
+                        sessionID = UUID.randomUUID();
+                    }
+
+                    //Pour des raisons de facilité le sessionId est stocké au niveau de la conf du framework
+                    angular.extend(FWK_CONSTANT, {'x_session_id': sessionID});
+
+                    // conservation du profile utilisateur
+                    this.currentUser = activeProfile;
+
+                    //stockage du jeton de sécurité
+                    tokenService.storeLocalToken(accessToken);
+
+                },
 
                 // Logout the current user and redirect
                 logout: function () {

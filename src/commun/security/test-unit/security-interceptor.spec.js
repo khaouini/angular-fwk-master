@@ -7,7 +7,8 @@ describe('Tests requestSecurityInterceptor Module ', function() {
 
     beforeEach(function () {
         angular.module('test', ['fwk-security.interceptor', 'fwk-security.oauth']).value('FWK_CONSTANT',
-            { profile: 'MOCK',
+            {   x_session_id: 'b670b0bc-61e9-4430-9801-decc5310531c',
+                profile: 'MOCK',
                 oauth: {
                     queryStringParameters : {
                         response_type: 'token',
@@ -59,6 +60,7 @@ describe('Tests requestSecurityInterceptor Module ', function() {
     it('should request idp/login OK', function() {
         var newPromise = interceptor.request(config);
         expect(config.headers['X-RequestID']).toMatch("[0123456789abcdef]{8}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{12}");
+        expect(config.headers['X-SessionID']).toMatch("[0123456789abcdef]{8}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{12}");
         expect(httpLogger.getLogs().length).toBe(1);
     });
 
@@ -66,6 +68,7 @@ describe('Tests requestSecurityInterceptor Module ', function() {
         config.url="/rest/domaines";
         var newPromise = interceptor.request(config);
         expect(config.headers['X-RequestID']).toMatch("[0123456789abcdef]{8}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{12}");
+        expect(config.headers['X-SessionID']).toMatch("[0123456789abcdef]{8}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{4}-[0123456789abcdef]{12}");
         expect(config.headers['Authorization']).toBe("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBUFBfVVNFUl9JRCI6IjM4OTRIIiwiQVBQX1VTRVJfUk9MRSI6WyJHRVNUSU9OTkFJUkUiXSwiQVBQX0NMSUVOVF9ST0xFIjpbIlJFQUQiLCJXUklURSJdLCJleHAiOjEzOTU4MTk3NTcsImF1ZCI6InVybjpjZGM6cmV0cmFpdGU6Y2xpOnJlc3Q6MS4wLCB1cm46Y2RjOnJldHJhaXRlOnNldDAxOnJlc3Q6MS4wIiwiaXNzIjoidXJuOmNkYzpjb25mbnVtOmlkcDphdXRoMiIsInN1YiI6InVybjpjZGM6cmV0cmFpdGU6ZXNnOmlobToxLjAiLCJpYXQiOjEzOTU4MTYxNTd9.1tnRB0ENn21zLvKdASQzSEzTfde0xCJYpuy0wZj7_RQ");
         expect(httpLogger.getLogs().length).toBe(1);
     });
@@ -77,7 +80,8 @@ describe('Tests responseSecurityInterceptor Module ', function() {
 
     beforeEach(function () {
         angular.module('test', ['fwk-security.interceptor', 'fwk-security.oauth', 'fwk-services.error']).value('FWK_CONSTANT',
-            { profile: 'MOCK',
+            {   x_session_id: 'b670b0bc-61e9-4430-9801-decc5310531c',
+                profile: 'MOCK',
                 oauth: {
                     queryStringParameters: {
                         response_type: 'token',
@@ -124,7 +128,8 @@ describe('Tests responseSecurityInterceptor Module ', function() {
                 cache: {},
                 headers: {
                     Accept: "application/json",
-                    "X-RequestID": "ca38320b-841d-4659-81eb-9ffcda0f512b"
+                    "X-RequestID": "ca38320b-841d-4659-81eb-9ffcda0f512b",
+                    "X-SESSIONID": "b670b0bc-61e9-4430-9801-decc5310531c"
                 },
                 status: 200,
                 data: "données..."
@@ -138,7 +143,8 @@ describe('Tests responseSecurityInterceptor Module ', function() {
                 cache: {},
                 headers: {
                     Accept: "application/json",
-                    "X-RequestID": "ca38320b-841d-4659-81eb-9ffcda0f512b"
+                    "X-RequestID": "ca38320b-841d-4659-81eb-9ffcda0f512b",
+                    "X-SESSIONID": "b670b0bc-61e9-4430-9801-decc5310531c"
                 }
             },
             status: 400, //Bad Request

@@ -4,6 +4,22 @@
 /**
  * Created by Guillemette on 13/05/2014.
  */
+/**
+describe('Test oauthService module', function () {
+    it('should retrieve token', function() {
+
+        var configOAUTH2 = {
+            response_type: 'token',
+            client_id : 'urn:cdc:retraite:esg:ihm:1.0',
+            redirect_uri : 'http://desote-web-springmvc-spi/oauth2Callback.html',
+            scope : 'urn:cdc:retraite:cli:rest:1.0, urn:cdc:retraite:set01:rest:1.0',
+            state : 'b670b0bc-61e9-4430-9801-decc5310531c'
+        };
+        var urlReturn = objectToQueryString(configOAUTH2);
+        expect(urlReturn).toBeDefined();
+    });
+});
+*/
 describe('Test oauthService module', function () {
 
     var oauthService, tokenService;

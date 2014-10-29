@@ -19,7 +19,7 @@ describe('Test securityUtils module', function () {
 
 describe('Test authentService module', function () {
 
-    var authentService, $httpBackend, userInfo;
+    var authentService, $httpBackend, userInfo, tokenService, $log;
 
     beforeEach(function () {
         angular.module('test', ['fwk-security.service']).value('FWK_CONSTANT',
@@ -39,6 +39,7 @@ describe('Test authentService module', function () {
         authentService = $injector.get('authentService');
         $httpBackend  = $injector.get('$httpBackend');
         $log = $injector.get('$log');
+        tokenService =$injector.get('tokenService');
 
         userInfo ={
             "id": 123456,
@@ -103,5 +104,29 @@ describe('Test authentService module', function () {
         authentService.logout();
         $httpBackend.flush();
         expect(authentService.currentUser).toBeNull();
+    });
+
+    it('should throw exception silentLogin without activeProfile parameter', function () {
+        expect(authentService).toBeDefined();
+        expect(function(){
+            authentService.silentLogin("", "739d4686286163379af3854f37ed85", "b670b0bc-61e9-4430-9801-decc5310531c");
+        }).toThrow();
+    });
+
+    it('should throw exception silentLogin without accessToken parameter', function () {
+        expect(authentService).toBeDefined();
+        expect(function(){
+            authentService.silentLogin(userInfo, "", "b670b0bc-61e9-4430-9801-decc5310531c");
+        }).toThrow();
+    });
+
+    it('should store activeProfil and accessToken', function () {
+        expect(authentService).toBeDefined();
+        expect(tokenService).toBeDefined();
+        authentService.silentLogin(userInfo, "739d4686286163379af3854f37ed85", "b670b0bc-61e9-4430-9801-decc5310531c");
+        expect(authentService.currentUser).toBeDefined();
+        expect(authentService.currentUser.username).toBe('John');
+        expect(tokenService.getLocalToken()).toBeDefined();
+        expect(tokenService.getLocalToken()).toBe("739d4686286163379af3854f37ed85");
     });
 });

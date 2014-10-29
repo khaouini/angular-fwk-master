@@ -22,8 +22,8 @@
 
     angular.module('fwk-security.interceptor', ['fwk-security', 'fwk-services'])
 
-        .factory('requestSecurityInterceptor', ['$injector', '$q', '$log', 'localizedMessages', 'dateFilter', 'restFault', 'invalidCredentialFault', 'FWK_CONSTANT', 'tokenService', 'httpLogger',
-            function ($injector, $q, $log, localizedMessages, dateFilter, restFault, invalidCredentialFault,FWK_CONSTANT, tokenService, httpLogger) {
+        .factory('requestSecurityInterceptor', ['$injector', '$q', '$log', 'localizedMessages', 'dateFilter', 'restFault', 'invalidCredentialFault', 'FWK_CONSTANT', 'tokenService', 'httpLogger', 'UUID',
+            function ($injector, $q, $log, localizedMessages, dateFilter, restFault, invalidCredentialFault,FWK_CONSTANT, tokenService, httpLogger, UUID) {
 
 	            var requestInterceptor = {
 
@@ -41,11 +41,13 @@
                            config.headers = config.headers || {};
                            config.headers.Authorization = 'Bearer ' + tokenService.getLocalToken();
                         }
-                        config.headers['X-RequestID'] = tokenService.getUUID();
+                        config.headers['X-RequestID'] = UUID.randomUUID();
+                        config.headers['X-SessionID'] = FWK_CONSTANT.x_session_id;
 
                         var callLog = localizedMessages.get('trace.request.msg', {
                             dateTime : dateFilter(now, 'dd/MM/yyyy HH:mm:ss'),
                             uuid:  config.headers['X-RequestID'],
+                            uuidSession : config.headers['X-SessionID'],
                             url: config.url
                         });
 
@@ -72,6 +74,7 @@
 	                var callLog = localizedMessages.get('trace.response.msg', {
 	                    dateTime : dateFilter(now, 'dd/MM/yyyy HH:mm:ss'),
 	                    uuid:  response.config.headers['X-RequestID'],
+                        uuidSession : response.config.headers['X-SessionID'],
 	                    url: response.config.url,
 	                    delay: timeElapsed,
 	                    type : status,

@@ -1,7 +1,7 @@
 
     angular.module('fwk-services.base64', [])
 
-        .factory('Base64', function () {
+        .factory('Base64', ['$log', function ($log) {
             var keyStr = 'ABCDEFGHIJKLMNOP' +
                 'QRSTUVWXYZabcdef' +
                 'ghijklmnopqrstuv' +
@@ -52,7 +52,7 @@
                     // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
                     var base64test = /[^A-Za-z0-9\+\/\=]/g;
                     if (base64test.exec(input)) {
-                        window.console.log("There were invalid base64 characters in the input text.\n" +
+                       $log.error("There were invalid base64 characters in the input text.\n" +
                             "Valid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\n" +
                             "Expect errors in decoding.");
                     }
@@ -85,4 +85,4 @@
                     return output;
                 }
             };
-        });
+        }]);
