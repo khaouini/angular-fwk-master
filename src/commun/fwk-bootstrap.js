@@ -1,7 +1,10 @@
+(function ( window, angular ) {
 
-    // Exemple de chargement manuel de bootstrap
+
+    // Exemple 1 de chargement manuel de bootstrap
     // La configuration de l'application et du FWK est récupérée via un appel REST.
     // Donne lieu à la création de deux CONSTANT au sens AngularJS
+    // A COMMENTER si le chargement de ces variables s'opère par des variables Javascript (cf exemple 2)
     angular.element(document).ready(function() {
 
         var initInjector = angular.injector([ 'ng' ]);
@@ -16,8 +19,17 @@
         });
     });
 
-    // Exemple de profile
-    //var PROFILE_ENABLE = ['DEBUG', 'MOCK', 'NORMAL'];
+    //Exemple 2 de chargement ou cette fois-ci la page index.html renvoyée par le serveur positionne
+    // des vraiables Javascript pré-valorisées
+    // A COMMENTER si ce scénario n'est pas retenu
+    angular.module('statsSps.config', [])
+        .config(['$provide',
+            function ($provide) {
+
+                $provide.constant('FWK_CONSTANT', window.myActiveConfig.fwk_constant);
+                $provide.constant('STATS_SPS_CONSTANT', window.myActiveConfig.app_constant);
+
+            }]);
 
 
 	angular.module('my-app', [
@@ -42,8 +54,16 @@
 	.run(['$rootScope', '$state', '$stateParams', '$log', '$locale', 'authentService', 'i18nNotifications', 'FWK_CONSTANT',
       function ($rootScope, $state, $stateParams, $log, $locale, authentService, i18nNotifications, FWK_CONSTANT) {
 
-		$log.debug('Démarrage application...run');
-		$log.debug('Locale : ' + $locale.id);
+        //Authentification silencieuse aprés cinématique OAUTH2 dans laquelle l'utilisateur doit
+        //être authentifié pour accéder au lanceur de l'application
+        // A COMMENTER si l'application gère sa propre page de login ou utilise une popup pour sa cinématique OAUTH
+        authentService.silentLogin(window.myActiveProfile, window.myAccessToken, window.mySessionID);
+
+        $log.debug('Démarrage application...run');
+        $log.debug('$locale.id : ' + $locale.id);
+        $log.debug('x_session_id : ' + window.mySessionID);
+        $log.debug('access_token : ' + window.myAccessToken);
+
 
 		$rootScope.$state = $state;
 		$rootScope.$stateParams = $stateParams;
@@ -115,3 +135,5 @@
 	        $state.go(FWK_CONSTANT.errorState);
 	      });
 	}]);
+
+})( window , window.angular );
