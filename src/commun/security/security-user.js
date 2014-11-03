@@ -1,4 +1,4 @@
-
+/**
     var UserDTOFactory = function (userData) {
 
         //les données sont private
@@ -18,13 +18,38 @@
           };
 
       };
-
+*/
     angular.module('fwk-security.user', [])
         .factory('userService', [function () {
 
-            return function (data) {
+            function UserConnected() {
+            }
+
+            UserConnected.prototype.isUserInRole =  function isUserInRole(role) {
+                for (var i = 0; i < this.roles.length; i++) {
+                    if (this.roles[i].toString() === role) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            UserConnected.prototype.getFullName = function getFullName() {
+                return this.firstname + ' ' + this.lastname;
+            };
+
+/**            return function (data) {
                 var userDTO = new UserDTOFactory(data);
                 return userDTO;
-              };
+              };*/
+
+            /**
+             * Modif MG 03/11/2014
+             */
+            return function(data) {
+               var anUser = new UserConnected();
+               angular.extend(anUser, data);
+               return anUser;
+            };
 
           }]);

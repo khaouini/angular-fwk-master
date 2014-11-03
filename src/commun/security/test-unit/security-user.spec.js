@@ -27,9 +27,12 @@ describe('Test security-user module', function () {
             "email": "john.doe@unknow.com"
         });
         expect(user).toBeDefined();
-        expect(user.getFullname()).toBe("John Doe");
+
+        expect(user.getFullName()).toBe("John Doe");
         expect(user.isUserInRole("ADMIN")).toBeTruthy();
         expect(user.isUserInRole("GEST")).toBeFalsy();
+        expect(user.username).toBe("John");
+
     });
 
     it('should getFullname have been called', function () {
@@ -41,10 +44,10 @@ describe('Test security-user module', function () {
             "lastname": "Doe",
             "email": "john.doe@unknow.com"
         });
-        spyOn(user, "getFullname").andReturn("John Doe");;
+        spyOn(user, "getFullName").andReturn("John Doe");
         spyOn(user, "isUserInRole");
-        user.getFullname();
-        expect(user.getFullname).toHaveBeenCalled();
+        user.getFullName();
+        expect(user.getFullName).toHaveBeenCalled();
         expect(user.isUserInRole).not.toHaveBeenCalled();
     });
 });
