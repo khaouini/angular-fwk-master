@@ -158,7 +158,7 @@
                     angular.extend(FWK_CONSTANT, {'x_session_id': sessionID});
 
                     // conservation du profile utilisateur
-                    this.currentUser = activeProfile;
+                    this.currentUser = userService(activeProfile);
 
                     //stockage du jeton de sécurité
                     tokenService.storeLocalToken(accessToken);
