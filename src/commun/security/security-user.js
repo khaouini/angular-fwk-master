@@ -1,4 +1,21 @@
 /**
+ * Objet UserConnected public
+ * Déclaré en global dans le fichier module.prefix
+ * @constructor
+ */
+var UserConnected = function() {
+};
+
+UserConnected.prototype.isUserInRole =  function isUserInRole(role) {
+    for (var i = 0; i < this.roles.length; i++) {
+        if (this.roles[i].toString() === role) {
+            return true;
+        }
+    }
+    return false;
+};
+
+/**
     var UserDTOFactory = function (userData) {
 
         //les données sont private
@@ -22,21 +39,9 @@
     angular.module('fwk-security.user', [])
         .factory('userService', [function () {
 
-            function UserConnected() {
-            }
-
-            UserConnected.prototype.isUserInRole =  function isUserInRole(role) {
-                for (var i = 0; i < this.roles.length; i++) {
-                    if (this.roles[i].toString() === role) {
-                        return true;
-                    }
-                }
-                return false;
-            };
-
-            UserConnected.prototype.getFullName = function getFullName() {
+/**            UserConnected.prototype.getFullName = function getFullName() {
                 return this.firstname + ' ' + this.lastname;
-            };
+            };*/
 
 /**            return function (data) {
                 var userDTO = new UserDTOFactory(data);
