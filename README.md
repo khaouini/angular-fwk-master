@@ -5,7 +5,7 @@
 Cette distribution apporte les services de base nécessaires :
 
 - à la construction d'applications de type **SPI/SPA** (mashup client)
-- s'appuyant sur le framework **AngularJS (v1.2.x / v1.3.x)**
+- s'appuyant sur le framework **AngularJS (v1.3.x)**
 - déployée dans notre architecture interne **WOA (REST/SPS/OAUTH)**
 
 
@@ -37,11 +37,11 @@ Sur la base du Framework MVC AngularJS, elle adresse un certain nombre de probl�
 
 Nom : *angular-fwk-distrib*
 
-Version courante : 0.0.9
+Version courante : 0.0.12
 
 Repository : [GitHub angular-fwk-distrib](https://github.com/mguillem37/angular-fwk-distrib.git)
 
-Fichier Javascript : `angular-fwk-dei-0.0.9.min.js` (`angular-fwk-dei-0.0.9.js`)
+Fichier Javascript : `angular-fwk-dei-0.0.12.min.js` (`angular-fwk-dei-0.0.12.js`)
 
 
 
@@ -50,6 +50,7 @@ Fichier Javascript : `angular-fwk-dei-0.0.9.min.js` (`angular-fwk-dei-0.0.9.js`)
 - [Framework AngularJS](https://angularjs.org/)
 - [Angular UI Router](https://github.com/angular-ui/ui-router)
 - [Angular local storage](http://gregpike.net/demos/angular-local-storage/demo.html)
+- [Angular Translate - OPTIONAL](https://github.com/angular-translate/angular-translate)
 
 
 

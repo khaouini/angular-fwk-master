@@ -66,8 +66,8 @@ module.exports = {
             'vendor-bower/angular/angular.js',
             'vendor-bower/angular-resource/angular-resource.js',
             'vendor-bower/angular-sanitize/angular-sanitize.js',
-            'vendor-svn/angular-local-storage/angular-local-storage.js',
-            'vendor-svn/angular-i18n/angular-locale_fr-fr.js'
+            'vendor-bower/angular-i18n/angular-locale_fr-fr.js',
+            'vendor-svn/angular-local-storage/angular-local-storage.js'
         ],
         mock: [
             'vendor-bower/angular-mocks/angular-mocks.js'
