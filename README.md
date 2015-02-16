@@ -39,7 +39,7 @@ Nom : *angular-fwk-distrib*
 
 Version courante : 0.0.14
 
-Repository : [GitHub angular-fwk-distrib](https://github.com/mguillem37/angular-fwk-distrib.git)
+Distrib : [GitHub angular-fwk-distrib](https://github.com/mguillem37/angular-fwk-distrib.git)
 
 Fichier Javascript : `angular-fwk-dei-0.0.14.min.js` (`angular-fwk-dei-0.0.14.js`)
 
@@ -52,5 +52,3 @@ Fichier Javascript : `angular-fwk-dei-0.0.14.min.js` (`angular-fwk-dei-0.0.14.js
 - [Angular local storage](http://gregpike.net/demos/angular-local-storage/demo.html)
 - [Browser Info](http://transferwise.github.io/ng-browser-info/)
 - [Angular Translate - OPTIONAL](https://github.com/angular-translate/angular-translate)
- 
-
