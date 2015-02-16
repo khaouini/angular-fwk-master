@@ -1,42 +1,50 @@
 {
-    "name": "angular-fwk-dei",
-    "version": "0.0.13",
-    "description": "Framework AngularJS DEI",
-    "keywords": [
-        "FWK",
-        "ANGULARJS",
-        "DEI"
-    ],
-    "authors": [
-        "mathieu.guillemette@caissedesdepots.fr",
-        "guillaume.dauvergne@caissedesdepots.fr"
-    ],
-    "private": true,
-    "dependencies": {
-        "bootstrap": "~3.0.0",
-        "angular-bootstrap": "~0.11.2",
-        "angular-messages": "1.3.7",
-        "angular-translate": "2.5.2",
-        "angular-translate-interpolation-messageformat": "2.5.2",
-        "angular-translate-loader-static-files": "2.5.2",
-        "angular-translate-loader-partial": "2.5.2",
-        "angular-translate-loader-url": "2.5.2",
-        "angular": "1.3.7",
-        "angular-resource": "1.3.7",
-        "angular-sanitize": "1.3.7",
-        "angular-animate": "1.3.7",
-        "angular-cookies": "1.3.7",
-        "angular-i18n": "1.3.7",
-        "font-awesome": "~4.0.3",
-        "angular-ui-router": "~0.2.13",
-        "angular-local-storage": "0.1.3"
-    },
-    "devDependencies": {
-        "angular-mocks": "1.3.7",
-        "angular-scenario": "1.3.7"
-    },
-    "resolutions": {
-        "angular": "1.3.7",
-        "angular-translate": "2.5.2"
-    }
+  "name": "angular-fwk-dei",
+  "version": "0.0.14",
+  "description": "Framework AngularJS DEI",
+  "keywords": [
+    "FWK",
+    "ANGULARJS"
+  ],
+  "authors": [
+    "mathieu.guillemette@caissedesdepots.fr",
+    "guillaume.dauvergne@caissedesdepots.fr"
+  ],
+  "main": "./dist/angular-fwk-dei-0.0.14.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mguillem37/angular-fwk-master.git"
+  },
+  "dependencies": {
+    "bootstrap": "~3.0.0",
+    "angular-bootstrap": "~0.11.2",
+    "angular-messages": "1.3.11",
+    "angular-translate": "2.5.2",
+    "angular-translate-interpolation-messageformat": "2.5.2",
+    "angular-translate-loader-static-files": "2.5.2",
+    "angular-translate-loader-partial": "2.5.2",
+    "angular-translate-loader-url": "2.5.2",
+    "angular": "1.3.11",
+    "angular-resource": "1.3.11",
+    "angular-sanitize": "1.3.11",
+    "angular-animate": "1.3.11",
+    "angular-cookies": "1.3.11",
+    "angular-i18n": "1.3.7",
+    "font-awesome": "~4.0.3",
+    "angular-ui-router": "~0.2.13",
+    "angular-local-storage": "0.1.3",
+    "ng-browser-info": "~0.1.2",
+    "angular-mocks": "1.3.11",
+    "angular-scenario": "1.3.11"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.3.11",
+    "angular-scenario": "1.3.11"
+  },
+  "resolutions": {
+    "angular": "1.3.11",
+    "angular-translate": "2.5.2",
+    "angular-mocks": "1.3.11",
+    "angular-scenario": "1.3.11"
+  }
 }

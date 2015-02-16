@@ -34,6 +34,17 @@
             <li ng-repeat="call in calls track by $index">{{ call }}</li>
         </ul>
 
+        <p class="stacktrace"><strong>System Info : </strong></p>
+        <ul class="stacktrace">
+            <li><strong>Screen Size : </strong>{{ browserLocalInfo.screenSize.height }}x{{ browserLocalInfo.screenSize.width }}</li>
+            <li><strong>Window Size : </strong>{{ browserLocalInfo.windowSize.height }}x{{ browserLocalInfo.windowSize.width }}</li>
+            <li><strong>Is Mobile : </strong>{{ browserLocalInfo.mobile }}</li>
+            <li><strong>Are Cookies Enabled : </strong>{{ browserLocalInfo.cookiesEnabled }}</li>
+            <li><strong>Language : </strong>{{ browserLocalInfo.language }}</li>
+            <li><strong>OS Name : </strong>{{ browserLocalInfo.os.name }} version {{ browserLocalInfo.os.version }}</li>
+            <li><strong>Browser Name : </strong>{{ browserLocalInfo.browser.name }} version {{ browserLocalInfo.browser.version }}</li>
+        </ul>
+
         <p>Cliquez <a href="#/start">ici</a> pour vous authentifier à nouveau</p>
     </div>
 </div>

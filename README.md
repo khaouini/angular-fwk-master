@@ -37,11 +37,11 @@ Sur la base du Framework MVC AngularJS, elle adresse un certain nombre de probl�
 
 Nom : *angular-fwk-distrib*
 
-Version courante : 0.0.13
+Version courante : 0.0.14
 
 Repository : [GitHub angular-fwk-distrib](https://github.com/mguillem37/angular-fwk-distrib.git)
 
-Fichier Javascript : `angular-fwk-dei-0.0.13.min.js` (`angular-fwk-dei-0.0.13.js`)
+Fichier Javascript : `angular-fwk-dei-0.0.14.min.js` (`angular-fwk-dei-0.0.14.js`)
 
 
 
@@ -50,28 +50,7 @@ Fichier Javascript : `angular-fwk-dei-0.0.13.min.js` (`angular-fwk-dei-0.0.13.js
 - [Framework AngularJS](https://angularjs.org/)
 - [Angular UI Router](https://github.com/angular-ui/ui-router)
 - [Angular local storage](http://gregpike.net/demos/angular-local-storage/demo.html)
+- [Browser Info](http://transferwise.github.io/ng-browser-info/)
 - [Angular Translate - OPTIONAL](https://github.com/angular-translate/angular-translate)
-
-
-
-## intégration dans les projets
-
-###### Les étapes nécessaires à l'intégration et à la configuration du Socle DEI AngularJS sont abordées [ici](https://github.com/mguillem37/angular-fwk-distrib.git)
-
-
-
-## Description des modules et des services
-
-
-
-## Génération des librairies de la distribution
-
-### montée de version
-- modif package.json
-- modif bower.json
-
-### Lancement de la release
-
-        grunt release
  
 

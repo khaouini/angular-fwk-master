@@ -1,7 +1,7 @@
 {
   "name": "angular-fwk-dei",
   "author": "mathieu.guillemette@caissedesdepots.fr",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "devDependencies": {
     "phantomjs": "~1.9.2-6",
     "grunt": "~0.4.2",

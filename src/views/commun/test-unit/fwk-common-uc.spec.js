@@ -1,6 +1,6 @@
 describe('Test fwkErrorCtrl module', function () {
 
-    var $scope, stackFault, i18nNotifications, authentService, httpLogger, user;
+    var $scope, stackFault, i18nNotifications, authentService, httpLogger, user, browserInfo;
 
     beforeEach(function () {
         angular.module('test', ['fwk-common-uc']).value('FWK_CONSTANT',
@@ -25,6 +25,8 @@ describe('Test fwkErrorCtrl module', function () {
         i18nNotifications = $injector.get('i18nNotifications');
         authentService = $injector.get('authentService') ;
         httpLogger = $injector.get('httpLogger');
+        browserInfo = $injector.get('browserInfo');
+
 
         user = {
             "id": 123456,
@@ -61,13 +63,15 @@ describe('Test fwkErrorCtrl module', function () {
             'stackFault': stackFault,
             'i18nNotifications' : i18nNotifications,
             'authentService' : authentService,
-            'httpLogger' : httpLogger
+            'httpLogger' : httpLogger,
+            'browserInfo' : browserInfo
         });
 
         expect($scope.currentUser).toBeDefined();
         expect($scope.calls.length).toBe(2);
         expect($scope.error.name).toBe("Test error");
         expect($scope.headers.length).toBe(2);
+        expect($scope.browserLocalInfo).toBeDefined();
 
     }));
 

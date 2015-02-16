@@ -1,14 +1,17 @@
 
     angular.module( 'fwk-common-uc',
     	['fwk-services',
-         'fwk-security'
+         'fwk-security',
+         'ngBrowserInfo'
     ])
 
-    .controller('fwkErrorCtrl', ['$scope', 'stackFault', 'i18nNotifications', 'authentService', 'httpLogger',
-      function ($scope, stackFault, i18nNotifications, authentService, httpLogger) {
+    .controller('fwkErrorCtrl', ['$scope', 'stackFault', 'i18nNotifications', 'authentService', 'httpLogger', 'browserInfo',
+      function ($scope, stackFault, i18nNotifications, authentService, httpLogger, browserInfo) {
 
         $scope.currentUser = null;
         $scope.calls = [];
+
+        $scope.browserLocalInfo = browserInfo.giveMeAllYouGot();
 
         //Sauvegarde des infos sur l'utilisateur courant avant de le déconnecter
         angular.copy(authentService.currentUser, $scope.currentUser);
