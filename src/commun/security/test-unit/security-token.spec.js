@@ -9,7 +9,7 @@ describe('Test tokenService module', function () {
     var tokenService;
 
     beforeEach(function () {
-        angular.module('test', ['fwk-security.oauth']).value('FWK_CONSTANT',
+        module('test', ['fwk-security.oauth']).value('FWK_CONSTANT',
             { profile: 'MOCK',
                 mockPathBase: 'src/',
                 oauth : {
