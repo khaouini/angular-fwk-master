@@ -13,7 +13,7 @@
   "main": "./dist/angular-fwk-dei-0.0.14.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mguillem37/angular-fwk-distrib.git"
+    "url": "https://github.com/youssefguenoun/angular-fwk-master.git/"
   },
   "dependencies": {
     "bootstrap": "~3.0.0",
