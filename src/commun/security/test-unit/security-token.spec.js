@@ -46,6 +46,6 @@ describe('Test tokenService module', function () {
     });
 
     it('should get UUID', function () {
-       // expect(tokenService.getUUID()).toBeDefined();
+        expect(tokenService.getUUID()).toBeDefined();
     });
 });
