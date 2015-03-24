@@ -9,6 +9,7 @@ module.exports = function (config) {
          * A noter : angular-mocks is used for Jasmine and Karma testing. It publishes global methods module() and inject() to be used in your Jasmine spec tests.
          */
         files: [
+            'vendor-bower/angular/angular.js',
             <% scripts.forEach( function ( file ) { %>'<%= file %>',
                 <% }); %>
             'build/js/<%= packageName %>-<%= packageVersion %>.js',
