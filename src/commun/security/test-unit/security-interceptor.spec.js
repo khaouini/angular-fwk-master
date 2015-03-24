@@ -6,7 +6,7 @@ describe('Tests requestSecurityInterceptor Module ', function() {
     var interceptor, promise, wrappedPromise, httpLogger, $http, oauthService,tokenService, config;
 
     beforeEach(function () {
-        angular.module('test', ['fwk-security.interceptor', 'fwk-security.oauth']).value('FWK_CONSTANT',
+        module('test', ['fwk-security.interceptor', 'fwk-security.oauth']).value('FWK_CONSTANT',
             {   x_session_id: 'b670b0bc-61e9-4430-9801-decc5310531c',
                 profile: 'MOCK',
                 oauth: {
@@ -79,7 +79,7 @@ describe('Tests responseSecurityInterceptor Module ', function() {
     var interceptor, promise, wrappedPromise, httpLogger, $http, oauthService, tokenService, aResponse, koResponse, restFault;
 
     beforeEach(function () {
-        angular.module('test', ['fwk-security.interceptor', 'fwk-security.oauth', 'fwk-services.error']).value('FWK_CONSTANT',
+        module('test', ['fwk-security.interceptor', 'fwk-security.oauth', 'fwk-services.error']).value('FWK_CONSTANT',
             {   x_session_id: 'b670b0bc-61e9-4430-9801-decc5310531c',
                 profile: 'MOCK',
                 oauth: {

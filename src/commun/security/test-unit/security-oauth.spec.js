@@ -25,7 +25,7 @@ describe('Test oauthService module', function () {
     var oauthService, tokenService;
 
     beforeEach(function () {
-        angular.module('test', ['fwk-security.oauth']).value('FWK_CONSTANT',
+        module('test', ['fwk-security.oauth']).value('FWK_CONSTANT',
             { profile: 'MOCK',
                 idpBaseUrl: 'http://localhost:3001',
                 mockPathBase: 'src/',
