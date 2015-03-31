@@ -10,8 +10,16 @@ module.exports = function (config) {
          */
         files: [
             'vendor-bower/angular/angular.js',
-            <% scripts.forEach( function ( file ) { %>'<%= file %>',
-                <% }); %>
+            'vendor-bower/angular-resource/angular-resource.js',
+            'vendor-bower/angular-sanitize/angular-sanitize.js',
+            'vendor-bower/angular-i18n/angular-locale_fr-fr.js',
+            'vendor-svn/angular-local-storage/angular-local-storage.js',
+            'vendor-bower/ng-browser-info/dist/ngBrowserInfo.js',
+            'vendor-bower/angular-mocks/angular-mocks.js',
+            'src/commun/**/*.js',
+            'src/views/**.*.js',
+            /**<% scripts.forEach( function ( file ) { %>'<%= file %>',
+                <% }); %>*/
             'build/js/<%= packageName %>-<%= packageVersion %>.js',
             'build/tests/unit/**/*.spec.js'
         ],

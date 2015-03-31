@@ -1,4 +1,6 @@
 {
     "directory": "vendor-bower",
-    "json": "bower.json"
+    "json": "bower.json",
+    "registry": "http://localhost:5678",
+     "proxy": ""
 }
