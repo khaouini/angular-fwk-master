@@ -379,6 +379,24 @@ module.exports = function ( grunt ) {
         'karmaconfig', 'karma:unit'
     ]);
 
+    grunt.registerTask( 'package', [
+        'clean:build', 'clean:dist', 'clean:report',
+        'jshint:beforeconcat',
+        'copy:build_appjs', 'copy:build_jsunit', 'copy:build_mock_json',
+        'html2js',
+        'ngmin',
+        'concat',
+        'jshint:afterconcat',
+        'uglify',
+        'compress',
+        'copy:dist_js', 'copy:dist_mock_json', 'copy:dist_bootstrap_js'
+    ]);
+
+    grunt.registerTask( 'report', [
+        'clean:build', 'clean:dist', 'clean:report',
+        'plato:report'
+    ]);
+
     /**
      * The `release` task gets your app ready for deployment by concatenating and
      * minifying your code.
